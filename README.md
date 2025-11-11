@@ -9,7 +9,7 @@ This repo hosts the Symfony backend that powers the SWE Wannabe learning environ
 ## Architecture Snapshot
 - **Backend**: Symfony 7 + FrankenPHP + Caddy, with Mercure for server-sent events.
 - **CLI**: Node/TypeScript (Ink) assets compiled from `assets/src`.
-- **Data**: Postgres for users/courses/tasks/submissions; Doctrine handles persistence.
+- **Data**: Postgres (Dockerized in `compose.yaml`) for users/courses/tasks/submissions; Doctrine handles persistence.
 - **Runner**: Docker job worker triggered via GitHub webhooks (single VPS assumption).
 - **Docs**: `docs/brand.md` (tone) + `docs/prd.md` (functional spec) + `docs/app-shell.md` (SPA shell) + `AGENTS.md` (contrib guide).
 
@@ -22,6 +22,15 @@ This repo hosts the Symfony backend that powers the SWE Wannabe learning environ
 6. `php bin/console typescript:build --watch` (or `just build-ts`) while editing CLI/UI code under `assets/`.
 
 Reach the app at `https://localhost` (self-signed cert). Shut down with `docker compose down --remove-orphans`.
+
+### Database Notes
+- A `database` service (Postgres 15-alpine) now ships with `docker compose`. Defaults are aligned with `DATABASE_URL` in `php` service (`POSTGRES_USER=app`, `POSTGRES_PASSWORD=!ChangeMe!`, `POSTGRES_DB=app`); override them via environment variables before starting the stack.
+- Data persists in the `database_data` volume. To inspect locally, run `docker compose exec database psql -U app -d app`.
+- Configure Doctrine by requiring the ORM pack (`composer require symfony/orm-pack`) once you are ready to scaffold entities and migrations.
+- Symfony is already wired with DSNs:
+  - Dev: `DATABASE_URL=postgresql://app:!ChangeMe!@database:5432/app?serverVersion=15&charset=utf8` (set in `.env`).
+  - Test: `DATABASE_URL=postgresql://app:!ChangeMe!@database:5432/app_test?serverVersion=15&charset=utf8` (set in `.env.test`).
+  Update `POSTGRES_*` variables (and the DSNs above) if you change local credentials or server version.
 
 ## Quality & Testing
 - PHPUnit suites live in `tests/`; mirror the `src/` structure (`App\Tests\Runner\JobDispatchTest`).
@@ -37,6 +46,15 @@ Start with `AGENTS.md` for coding standards, naming conventions, and PR checklis
   - Symfony serves a single Twig shell for all non-static routes.
   - `window.app.router` intercepts navigation, emits `router:navigate`, and keeps the sidebar + views in sync.
   - Route-specific panels are rendered as `<article data-route-view="…">` blocks so we can hydrate them with server or client data later.
+
+## Asset Build Tips
+- The TypeScript bundle (powered by `sensiolabs/typescript-bundle`) must be compiled whenever you add or rename files under `assets/src/`. Use `docker compose exec php php bin/console typescript:build --watch` during development.
+- If you see circular-reference errors such as `app.js -> src/app.ts -> src/components.ts -> app.js` or missing compiled files (`components.js`), clear the Symfony cache and recompile the asset map:
+  ```
+  docker compose exec php php bin/console cache:clear
+  docker compose exec php php bin/console asset-map:compile
+  ```
+  This rebuilds the SWC output under `public/assets` so the import map points to the latest JavaScript.
 
 ## TODO / Roadmap
 1. **Visual polish** — Further refine the terminal window look: window chrome, draggable-style header, subtle phosphor glow, shell-based breadcrumbs, and animation cues (see `docs/brand.md` for tone).

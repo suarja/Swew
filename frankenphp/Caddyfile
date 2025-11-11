@@ -59,7 +59,10 @@
 	@frontController path index.php
 	php @frontController
 
+  @adminer path /adminer.php
+  php @adminer
+
 	file_server {
-		hide *.php
+		hide index.php
 	}
 }

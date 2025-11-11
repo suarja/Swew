@@ -9,6 +9,10 @@
         "php": ">=8.4.14",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "doctrine/dbal": "^3",
+        "doctrine/doctrine-bundle": "^2.18",
+        "doctrine/doctrine-migrations-bundle": "^3.6",
+        "doctrine/orm": "^3.5",
         "runtime/frankenphp-symfony": ">=0.2",
         "sensiolabs/typescript-bundle": "^0.2.2",
         "symfony/asset": "7.3.*",
@@ -75,6 +79,8 @@
         }
     },
     "require-dev": {
-        "symfony/maker-bundle": "^1.64"
+        "symfony/maker-bundle": "^1.64",
+        "symfony/stopwatch": "7.3.*",
+        "symfony/web-profiler-bundle": "7.3.*"
     }
 }

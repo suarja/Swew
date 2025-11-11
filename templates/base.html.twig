@@ -11,7 +11,6 @@
 
         {% block javascripts %}
             {% block importmap %}{{ importmap('app') }}{% endblock %}
-            <script type="module" src="{{ asset('src/app.ts') }}"></script>
         {% endblock %}
     </head>
     {% set current_path = app.request ? app.request.pathinfo : '/' %}

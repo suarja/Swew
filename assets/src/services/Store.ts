@@ -1,6 +1,6 @@
-import { Store } from "../types/store.type";
+import type { Store as StoreContract } from "../types/store.type";
 
-const Store: Store = {
+const Store: StoreContract = {
     get(key) {
         const value = localStorage.getItem(key);
         if (value === null) {
