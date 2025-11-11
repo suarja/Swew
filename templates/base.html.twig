@@ -16,38 +16,49 @@
     </head>
     {% set current_path = app.request ? app.request.pathinfo : '/' %}
     <body class="app-shell" data-current-route="{{ current_path }}">
-        <div class="app-grid">
-            <aside class="app-panel app-nav" data-component="nav">
-                <div class="brand-lockup">
-                    <span class="brand-lockup__title">SWE Wannabe</span>
-                    <p class="brand-lockup__tagline">Closer to the metal. Closer to mastery.</p>
+        <div class="app-terminal">
+            <header class="terminal-chrome">
+                <div class="chrome-dots" aria-hidden="true">
+                    <span class="chrome-dot chrome-dot--close"></span>
+                    <span class="chrome-dot chrome-dot--minimize"></span>
+                    <span class="chrome-dot chrome-dot--maximize"></span>
                 </div>
-                <nav class="nav-list" aria-label="Primary">
-                    <a class="nav-link" href="/" data-route="/">
-                        Dashboard
-                        <span class="nav-link__hint">overview</span>
-                    </a>
-                    <a class="nav-link" href="/courses" data-route="/courses">
-                        Courses
-                        <span class="nav-link__hint">depth-first</span>
-                    </a>
-                    <a class="nav-link" href="/cli" data-route="/cli">
-                        CLI
-                        <span class="nav-link__hint">tooling</span>
-                    </a>
-                    <a class="nav-link" href="/docs" data-route="/docs">
-                        Docs
-                        <span class="nav-link__hint">reference</span>
-                    </a>
-                </nav>
-                <div class="nav-footer">
-                    <span class="status-dot"></span>
-                    <span data-component="status-indicator" aria-live="polite">queue: idle</span>
-                </div>
-            </aside>
-            <main class="app-panel app-main" data-component="route-host" data-current-route="{{ current_path }}">
-                {% block body %}{% endblock %}
-            </main>
+                <div class="chrome-path">~/dojo/swe-wannabe</div>
+                <div class="chrome-session">mentor@wannabe</div>
+            </header>
+            <div class="app-grid">
+                <aside class="app-panel app-nav" data-component="nav">
+                    <div class="brand-lockup">
+                        <span class="brand-lockup__title">SWE Wannabe</span>
+                        <p class="brand-lockup__tagline">Closer to the metal. Closer to mastery.</p>
+                    </div>
+                    <nav class="nav-list" aria-label="Primary">
+                        <a class="nav-link" href="/" data-route="/">
+                            Dashboard
+                            <span class="nav-link__hint">overview</span>
+                        </a>
+                        <a class="nav-link" href="/courses" data-route="/courses">
+                            Courses
+                            <span class="nav-link__hint">depth-first</span>
+                        </a>
+                        <a class="nav-link" href="/cli" data-route="/cli">
+                            CLI
+                            <span class="nav-link__hint">tooling</span>
+                        </a>
+                        <a class="nav-link" href="/docs" data-route="/docs">
+                            Docs
+                            <span class="nav-link__hint">reference</span>
+                        </a>
+                    </nav>
+                    <div class="nav-footer">
+                        <span class="status-dot"></span>
+                        <span data-component="status-indicator" aria-live="polite">queue: idle</span>
+                    </div>
+                </aside>
+                <main class="app-panel app-main" data-component="route-host" data-current-route="{{ current_path }}">
+                    {% block body %}{% endblock %}
+                </main>
+            </div>
         </div>
     </body>
 </html>

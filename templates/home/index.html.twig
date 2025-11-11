@@ -11,29 +11,47 @@
     <div class="route-stack" data-component="route-stack">
         <article class="route-view" data-route-view="/" {% if active_route != '/' %}hidden{% endif %}>
             <section class="panel panel--hero">
+                <p class="panel__eyebrow">shell · dashboard</p>
                 <h1 class="panel__title">Learning by building the hard parts.</h1>
                 <p class="panel__subtitle">
                     Strip away abstractions, ship with the same toolchain as the platform, and document every insight like a terminal lab notebook.
                 </p>
+            </section>
+
+            <section class="panel">
+                <header class="panel__header">
+                    <div>
+                        <h2 class="panel__title">Live run state</h2>
+                        <p class="panel__subtitle">Values hydrate from LMS submissions + runner telemetry.</p>
+                    </div>
+                    <span class="panel__meta">data-source: lms.stream.status</span>
+                </header>
                 <div class="stat-grid">
-                    <div class="stat-card">
-                        <p class="stat-card__label">Active Course</p>
-                        <p class="stat-card__value">CLI Foundations</p>
-                    </div>
-                    <div class="stat-card">
-                        <p class="stat-card__label">Current Task</p>
-                        <p class="stat-card__value">Grader handshake</p>
-                    </div>
-                    <div class="stat-card">
-                        <p class="stat-card__label">Status</p>
-                        <p class="stat-card__value">Awaiting push</p>
-                    </div>
+                    <article class="stat-card" data-field="active-course">
+                        <p class="stat-card__label">Active course</p>
+                        <p class="stat-card__value stat-card__value--muted">waiting for sync…</p>
+                        <p class="stat-card__hint">populated once /courses API responds</p>
+                    </article>
+                    <article class="stat-card" data-field="current-task">
+                        <p class="stat-card__label">Focused task</p>
+                        <p class="stat-card__value stat-card__value--muted">—</p>
+                        <p class="stat-card__hint">bound to learner context</p>
+                    </article>
+                    <article class="stat-card" data-field="runner-status">
+                        <p class="stat-card__label">Runner status</p>
+                        <p class="stat-card__value stat-card__value--muted">standby</p>
+                        <p class="stat-card__hint">Mercure event channel</p>
+                    </article>
                 </div>
             </section>
 
             <section class="panel">
-                <h2 class="panel__title">How to spin up the dojo</h2>
-                <p class="panel__subtitle">Every contributor uses the same CLI-first workflow.</p>
+                <header class="panel__header">
+                    <div>
+                        <h2 class="panel__title">How to spin up the dojo</h2>
+                        <p class="panel__subtitle">Every contributor uses the same CLI-first workflow.</p>
+                    </div>
+                </header>
                 <ul class="command-list">
                     <li class="command">
                         <div class="command__title">Bootstrap dependencies</div>
@@ -54,10 +72,9 @@
                 </ul>
             </section>
 
-            <section class="panel">
+            <section class="panel panel--note">
                 <h2 class="panel__title">Principles of this build</h2>
-                <p class="panel__subtitle">Mentor-learner voice, bare-metal aesthetic, transparent progress.</p>
-                <ul>
+                <ul class="list-plain">
                     <li>Keep new UI components minimal, monochrome, and copy-light—every label should feel like a command palette entry.</li>
                     <li>Reference <code>docs/brand.md</code> and <code>docs/prd.md</code> before merging; update them if behavior shifts.</li>
                     <li>Document each workflow slice (GitHub App, runner, Mercure events) directly inside pull requests.</li>
@@ -67,29 +84,29 @@
 
         <article class="route-view" data-route-view="/courses" {% if active_route != '/courses' %}hidden{% endif %}>
             <section class="panel panel--hero">
+                <p class="panel__eyebrow">shell · courses</p>
                 <h1 class="panel__title">Course map</h1>
                 <p class="panel__subtitle">Progression built around first-principles depth, not flashy demos.</p>
             </section>
             <section class="panel">
-                <ul class="command-list">
-                    <li class="command">
-                        <div class="command__title">CLI Foundations</div>
-                        <code class="command__code">Task focus: device-code auth, config, doctor</code>
-                    </li>
-                    <li class="command">
-                        <div class="command__title">Runner Discipline</div>
-                        <code class="command__code">Task focus: Docker-per-job orchestration</code>
-                    </li>
-                    <li class="command">
-                        <div class="command__title">Realtime Observability</div>
-                        <code class="command__code">Task focus: Mercure SSE + graceful fallbacks</code>
-                    </li>
-                </ul>
+                <header class="panel__header">
+                    <div>
+                        <h2 class="panel__title">LMS feed</h2>
+                        <p class="panel__subtitle">Courses render here after `/api/courses` responds.</p>
+                    </div>
+                    <span class="panel__meta">collection: courses</span>
+                </header>
+                <div class="empty-state" data-collection="courses">
+                    <p class="empty-state__label">No courses loaded.</p>
+                    <p class="empty-state__hint">Connect the LMS service or seed fixtures to preview the layout.</p>
+                </div>
+                <div class="data-grid" aria-live="polite"></div>
             </section>
         </article>
 
         <article class="route-view" data-route-view="/cli" {% if active_route != '/cli' %}hidden{% endif %}>
             <section class="panel panel--hero">
+                <p class="panel__eyebrow">shell · cli</p>
                 <h1 class="panel__title">CLI rituals</h1>
                 <p class="panel__subtitle">Every command reads like a lab notebook entry.</p>
             </section>
@@ -117,6 +134,7 @@
 
         <article class="route-view" data-route-view="/docs" {% if active_route != '/docs' %}hidden{% endif %}>
             <section class="panel panel--hero">
+                <p class="panel__eyebrow">shell · documentation</p>
                 <h1 class="panel__title">Documentation uplink</h1>
                 <p class="panel__subtitle">Keep brand, product, and engineering specs in lockstep.</p>
             </section>
