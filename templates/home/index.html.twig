@@ -6,7 +6,7 @@
     {% set current_path = app.request ? app.request.pathinfo : '/' %}
     {% set normalized_path = current_path == '' ? '/' : current_path %}
     {% set active_route = normalized_path == '/home' ? '/' : normalized_path %}
-    {% set known_routes = ['/', '/courses', '/cli', '/docs'] %}
+    {% set known_routes = ['/', '/courses', '/cli', '/docs', '/profile'] %}
 
     <div class="route-stack" data-component="route-stack">
         <article class="route-view" data-route-view="/" {% if active_route != '/' %}hidden{% endif %}>
@@ -143,6 +143,46 @@
                     <li><code>docs/brand.md</code> — tone, aesthetics, and audience cues.</li>
                     <li><code>docs/prd.md</code> — MVP scope, system diagram, constraints.</li>
                     <li><code>AGENTS.md</code> — contributor workflow, commands, and PR etiquette.</li>
+                </ul>
+            </section>
+        </article>
+
+        <article class="route-view" data-route-view="/profile" {% if active_route != '/profile' %}hidden{% endif %}>
+            <section class="panel panel--hero">
+                <p class="panel__eyebrow">shell · profile</p>
+                <h1 class="panel__title">Account overview</h1>
+                <p class="panel__subtitle">Session cookies keep you signed in on this browser. Revoke tokens to log out your CLI.</p>
+            </section>
+            <section class="panel">
+                <header class="panel__header">
+                    <div>
+                        <h2 class="panel__title">Identity</h2>
+                        <p class="panel__subtitle">Data pulled from Doctrine `user` table.</p>
+                    </div>
+                    <span class="panel__meta">role set</span>
+                </header>
+                <div class="stat-grid">
+                    <article class="stat-card">
+                        <p class="stat-card__label">Name</p>
+                        <p class="stat-card__value">{{ app.user.name }}</p>
+                    </article>
+                    <article class="stat-card">
+                        <p class="stat-card__label">Email</p>
+                        <p class="stat-card__value">{{ app.user.email }}</p>
+                    </article>
+                    <article class="stat-card">
+                        <p class="stat-card__label">Roles</p>
+                        <p class="stat-card__value">{{ app.user.roles|join(', ') }}</p>
+                    </article>
+                </div>
+            </section>
+            <section class="panel panel--note">
+                <h2 class="panel__title">CLI tokens</h2>
+                <p>Create or revoke tokens via <code>php bin/console app:token:create</code>. Tokens are hashed server-side and can be rotated any time.</p>
+                <ul class="list-plain">
+                    <li>Tokens authenticate requests to <code>/api/*</code> endpoints via `Authorization: Bearer &lt;token&gt;` headers.</li>
+                    <li>Device sessions (web) use secure, HTTP-only cookies scoped to <code>{{ app.request.host }}</code>.</li>
+                    <li>Revoke compromised tokens by deleting them in the DB or via a future admin UI.</li>
                 </ul>
             </section>
         </article>

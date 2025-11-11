@@ -31,6 +31,77 @@ body::before {
     padding: 1.5rem;
 }
 
+.login-shell {
+    background-color: var(--swew-bg, #050505);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 2rem;
+}
+
+.login-terminal {
+    width: min(460px, 100%);
+    border-radius: 1rem;
+    border: 1px solid var(--swew-border, #1f232b);
+    background: var(--swew-panel, #0d0f12);
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.65);
+    overflow: hidden;
+}
+
+.login-panel {
+    padding: 2rem;
+}
+
+.login-error {
+    margin-bottom: 1rem;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--swew-danger, #ff5f56);
+    color: var(--swew-danger, #ff5f56);
+    background: rgba(255, 95, 86, 0.08);
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+}
+
+.login-form label {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--swew-muted, #7c8a9d);
+}
+
+.login-form input {
+    border-radius: 0.5rem;
+    border: 1px solid var(--swew-border, #1f232b);
+    background: rgba(255, 255, 255, 0.02);
+    color: var(--swew-text, #e6f1ff);
+    padding: 0.65rem 0.85rem;
+    font-family: inherit;
+}
+
+.login-submit {
+    margin-top: 0.5rem;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    border: none;
+    background: var(--swew-accent, #00ff9c);
+    color: #050505;
+    font-weight: 600;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.login-submit:hover {
+    filter: brightness(1.05);
+}
+
 .app-terminal {
     max-width: 1400px;
     margin: 0 auto;
@@ -168,6 +239,42 @@ body::before {
     background: var(--swew-accent-secondary, #00c3ff);
     box-shadow: 0 0 10px rgba(0, 195, 255, 0.6);
     animation: pulse 2.5s infinite;
+}
+
+.nav-account {
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.nav-account__name {
+    margin: 0;
+    font-weight: 600;
+}
+
+.nav-account__email {
+    margin: 0;
+    font-size: 0.75rem;
+    color: var(--swew-muted, #7c8a9d);
+}
+
+.logout-button {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.5rem;
+    background: transparent;
+    color: var(--swew-muted, #7c8a9d);
+    padding: 0.4rem 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+}
+
+.logout-button:hover {
+    color: var(--swew-danger, #ff5f56);
+    border-color: var(--swew-danger, #ff5f56);
 }
 
 .app-main {

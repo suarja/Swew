@@ -48,11 +48,27 @@
                             Docs
                             <span class="nav-link__hint">reference</span>
                         </a>
+                        <a class="nav-link" href="/profile" data-route="/profile">
+                            Profile
+                            <span class="nav-link__hint">account</span>
+                        </a>
                     </nav>
                     <div class="nav-footer">
                         <span class="status-dot"></span>
                         <span data-component="status-indicator" aria-live="polite">queue: idle</span>
                     </div>
+                    {% if app.user %}
+                        <div class="nav-account">
+                            <div class="nav-account__meta">
+                                <p class="nav-account__name">{{ app.user.name }}</p>
+                                <p class="nav-account__email">{{ app.user.email }}</p>
+                            </div>
+                            <form method="post" action="{{ path('app_logout') }}">
+                                <input type="hidden" name="_csrf_token" value="{{ csrf_token('logout') }}">
+                                <button class="logout-button" type="submit">logout</button>
+                            </form>
+                        </div>
+                    {% endif %}
                 </aside>
                 <main class="app-panel app-main" data-component="route-host" data-current-route="{{ current_path }}">
                     {% block body %}{% endblock %}

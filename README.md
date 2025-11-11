@@ -32,6 +32,13 @@ Reach the app at `https://localhost` (self-signed cert). Shut down with `docker 
   - Test: `DATABASE_URL=postgresql://app:!ChangeMe!@database:5432/app_test?serverVersion=15&charset=utf8` (set in `.env.test`).
   Update `POSTGRES_*` variables (and the DSNs above) if you change local credentials or server version.
 
+## Authentication
+- Every shell route is protected by Symfony Security; anonymous users are redirected to `/login`, which serves a branded terminal-style form. Logout lives at `/logout`.
+- Create local accounts via `docker compose exec php php bin/console app:user:create <email> <name> <password> [--admin]`. The command hashes the password and assigns `ROLE_USER` plus `ROLE_ADMIN` when requested.
+- Login throttling plus CSRF tokens are enabled by default. Adjust providers, roles, and access rules in `config/packages/security.yaml`.
+- CLI / API access uses bearer tokens minted with `docker compose exec php php bin/console app:token:create <email> <label> [--expires-in=P30D]`. Store the raw token securely and pass it via `Authorization: Bearer <token>` to `/api/*` endpoints (e.g., `/api/profile`). Tokens are stored hashed and can be revoked by deleting them via Doctrine or a future admin UI.
+- Full details (session cookies, token rotation, curl tests) are in `docs/auth.md`.
+
 ## Quality & Testing
 - PHPUnit suites live in `tests/`; mirror the `src/` structure (`App\Tests\Runner\JobDispatchTest`).
 - Run `vendor/bin/phpunit` inside the container. Add fixtures for Mercure/GitHub webhooks as needed.
