@@ -38,6 +38,16 @@ Reach the app at `https://localhost` (self-signed cert). Shut down with `docker 
 - Login throttling plus CSRF tokens are enabled by default. Adjust providers, roles, and access rules in `config/packages/security.yaml`.
 - CLI / API access uses bearer tokens minted with `docker compose exec php php bin/console app:token:create <email> <label> [--expires-in=P30D]`. Store the raw token securely and pass it via `Authorization: Bearer <token>` to `/api/*` endpoints (e.g., `/api/profile`). Tokens are stored hashed and can be revoked by deleting them via Doctrine or a future admin UI.
 - Full details (session cookies, token rotation, curl tests) are in `docs/auth.md`.
+- A device-code flow is being rolled out for the Node/Ink CLI: the CLI hits `/api/device-code`, learners approve the code at `/device`, and the CLI polls `/api/device-token` to receive a bearer token. The minimal CLI client lives in `cli/` and already supports `login` (device flow) and `status` (calls `/api/profile` with the stored token).
+
+### CLI Smoke Test
+```
+cd cli
+npm install
+SWEW_BASE_URL=https://localhost npm run login
+SWEW_BASE_URL=https://localhost npm run status
+```
+Set `SWEW_ACCEPT_SELF_SIGNED=1` if you want Node to ignore the local TLS certificate. The CLI stores tokens in `~/.swew/config.json`.
 
 ## Quality & Testing
 - PHPUnit suites live in `tests/`; mirror the `src/` structure (`App\Tests\Runner\JobDispatchTest`).

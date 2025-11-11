@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>SWE Wannabe · Login</title>
+        <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
+    </head>
+    <body class="login-shell">
+        <div class="login-terminal">
+            <header class="terminal-chrome">
+                <div class="chrome-dots" aria-hidden="true">
+                    <span class="chrome-dot chrome-dot--close"></span>
+                    <span class="chrome-dot chrome-dot--minimize"></span>
+                    <span class="chrome-dot chrome-dot--maximize"></span>
+                </div>
+                <div class="chrome-path">~/dojo/login</div>
+                <div class="chrome-session">guest@wannabe</div>
+            </header>
+            <main class="login-panel">
+                <h1 class="panel__title">Authenticate</h1>
+                <p class="panel__subtitle">Use your platform credentials to enter the dojo.</p>
+
+                {% if error %}
+                    <div class="login-error" role="alert">
+                        {{ error.messageKey|trans(error.messageData, 'security') }}
+                    </div>
+                {% endif %}
+
+                <form method="post" class="login-form">
+                    <label for="username">Email</label>
+                    <input type="email" id="username" name="_username" value="{{ last_username }}" autocomplete="email" required autofocus>
+
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="_password" autocomplete="current-password" required>
+
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                    <button class="login-submit" type="submit">enter</button>
+                </form>
+            </main>
+        </div>
+    </body>
+</html>
