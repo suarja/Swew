@@ -9,19 +9,19 @@
         "php": ">=8.4.14",
         "ext-ctype": "*",
         "ext-iconv": "*",
-        "runtime/frankenphp-symfony": "*",
+        "runtime/frankenphp-symfony": ">=0.2",
         "sensiolabs/typescript-bundle": "^0.2.2",
         "symfony/asset": "7.3.*",
         "symfony/asset-mapper": "7.3.*",
         "symfony/console": "7.3.*",
         "symfony/dotenv": "7.3.*",
-        "symfony/flex": "^2",
+        "symfony/flex": "^2.9",
         "symfony/framework-bundle": "7.3.*",
         "symfony/runtime": "7.3.*",
         "symfony/twig-bundle": "7.3.*",
         "symfony/yaml": "7.3.*",
-        "twig/extra-bundle": "^2.12|^3.0",
-        "twig/twig": "^2.12|^3.0"
+        "twig/extra-bundle": "^2.12|^3.22",
+        "twig/twig": "^2.12|^3.22"
     },
     "config": {
         "allow-plugins": {

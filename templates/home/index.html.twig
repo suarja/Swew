@@ -1,20 +1,139 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello HomeController!{% endblock %}
+{% block title %}Workbench · SWE Wannabe{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+    {% set current_path = app.request ? app.request.pathinfo : '/' %}
+    {% set normalized_path = current_path == '' ? '/' : current_path %}
+    {% set active_route = normalized_path == '/home' ? '/' : normalized_path %}
+    {% set known_routes = ['/', '/courses', '/cli', '/docs'] %}
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <div class="route-stack" data-component="route-stack">
+        <article class="route-view" data-route-view="/" {% if active_route != '/' %}hidden{% endif %}>
+            <section class="panel panel--hero">
+                <h1 class="panel__title">Learning by building the hard parts.</h1>
+                <p class="panel__subtitle">
+                    Strip away abstractions, ship with the same toolchain as the platform, and document every insight like a terminal lab notebook.
+                </p>
+                <div class="stat-grid">
+                    <div class="stat-card">
+                        <p class="stat-card__label">Active Course</p>
+                        <p class="stat-card__value">CLI Foundations</p>
+                    </div>
+                    <div class="stat-card">
+                        <p class="stat-card__label">Current Task</p>
+                        <p class="stat-card__value">Grader handshake</p>
+                    </div>
+                    <div class="stat-card">
+                        <p class="stat-card__label">Status</p>
+                        <p class="stat-card__value">Awaiting push</p>
+                    </div>
+                </div>
+            </section>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>/app/src/Controller/HomeController.php</code></li>
-        <li>Your template at <code>/app/templates/home/index.html.twig</code></li>
-    </ul>
-</div>
+            <section class="panel">
+                <h2 class="panel__title">How to spin up the dojo</h2>
+                <p class="panel__subtitle">Every contributor uses the same CLI-first workflow.</p>
+                <ul class="command-list">
+                    <li class="command">
+                        <div class="command__title">Bootstrap dependencies</div>
+                        <code class="command__code">composer install && docker compose build --pull --no-cache</code>
+                    </li>
+                    <li class="command">
+                        <div class="command__title">Start the stack</div>
+                        <code class="command__code">docker compose up --wait</code>
+                    </li>
+                    <li class="command">
+                        <div class="command__title">Enter the PHP container</div>
+                        <code class="command__code">docker exec -it app-php-1 bash</code>
+                    </li>
+                    <li class="command">
+                        <div class="command__title">Watch CLI assets</div>
+                        <code class="command__code">php bin/console typescript:build --watch</code>
+                    </li>
+                </ul>
+            </section>
+
+            <section class="panel">
+                <h2 class="panel__title">Principles of this build</h2>
+                <p class="panel__subtitle">Mentor-learner voice, bare-metal aesthetic, transparent progress.</p>
+                <ul>
+                    <li>Keep new UI components minimal, monochrome, and copy-light—every label should feel like a command palette entry.</li>
+                    <li>Reference <code>docs/brand.md</code> and <code>docs/prd.md</code> before merging; update them if behavior shifts.</li>
+                    <li>Document each workflow slice (GitHub App, runner, Mercure events) directly inside pull requests.</li>
+                </ul>
+            </section>
+        </article>
+
+        <article class="route-view" data-route-view="/courses" {% if active_route != '/courses' %}hidden{% endif %}>
+            <section class="panel panel--hero">
+                <h1 class="panel__title">Course map</h1>
+                <p class="panel__subtitle">Progression built around first-principles depth, not flashy demos.</p>
+            </section>
+            <section class="panel">
+                <ul class="command-list">
+                    <li class="command">
+                        <div class="command__title">CLI Foundations</div>
+                        <code class="command__code">Task focus: device-code auth, config, doctor</code>
+                    </li>
+                    <li class="command">
+                        <div class="command__title">Runner Discipline</div>
+                        <code class="command__code">Task focus: Docker-per-job orchestration</code>
+                    </li>
+                    <li class="command">
+                        <div class="command__title">Realtime Observability</div>
+                        <code class="command__code">Task focus: Mercure SSE + graceful fallbacks</code>
+                    </li>
+                </ul>
+            </section>
+        </article>
+
+        <article class="route-view" data-route-view="/cli" {% if active_route != '/cli' %}hidden{% endif %}>
+            <section class="panel panel--hero">
+                <h1 class="panel__title">CLI rituals</h1>
+                <p class="panel__subtitle">Every command reads like a lab notebook entry.</p>
+            </section>
+            <section class="panel">
+                <ul class="command-list">
+                    <li class="command">
+                        <div class="command__title">Login</div>
+                        <code class="command__code">swew login</code>
+                    </li>
+                    <li class="command">
+                        <div class="command__title">Task briefing</div>
+                        <code class="command__code">swew open &lt;task&gt;</code>
+                    </li>
+                    <li class="command">
+                        <div class="command__title">Doctor</div>
+                        <code class="command__code">swew doctor</code>
+                    </li>
+                    <li class="command">
+                        <div class="command__title">Status stream</div>
+                        <code class="command__code">swew status --watch</code>
+                    </li>
+                </ul>
+            </section>
+        </article>
+
+        <article class="route-view" data-route-view="/docs" {% if active_route != '/docs' %}hidden{% endif %}>
+            <section class="panel panel--hero">
+                <h1 class="panel__title">Documentation uplink</h1>
+                <p class="panel__subtitle">Keep brand, product, and engineering specs in lockstep.</p>
+            </section>
+            <section class="panel">
+                <ul>
+                    <li><code>docs/brand.md</code> — tone, aesthetics, and audience cues.</li>
+                    <li><code>docs/prd.md</code> — MVP scope, system diagram, constraints.</li>
+                    <li><code>AGENTS.md</code> — contributor workflow, commands, and PR etiquette.</li>
+                </ul>
+            </section>
+        </article>
+
+        <article class="route-view" data-route-view="__fallback" {% if active_route in known_routes %}hidden{% endif %}>
+            <section class="panel panel--hero">
+                <h1 class="panel__title">Route not instrumented</h1>
+                <p class="panel__subtitle">This path is not wired yet. Circle back to the roadmap in <code>docs/prd.md</code>.</p>
+            </section>
+        </article>
+    </div>
 {% endblock %}
