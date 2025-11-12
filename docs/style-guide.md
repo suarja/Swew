@@ -19,6 +19,7 @@
 - Apply `font-mono` for data points/labels and `font-sans` (Inter/IBM Plex Sans) for longer copy.
 - Respect prefers-reduced-motion; animations should stick to opacity/translate with `duration-300` max.
 
+## Components
 - **Shell card**: `.card` styles the primary panels (rounded-2xl, border, shadow, `padding:2rem`). Variants like `.hero-card`, `.feature-card`, `.form-card` build on it for hero copy, stat grids, or auth flows.
 - **Pills**: `.pill-link` + `.pill-link.primary` produce rounded call-to-action chips (“Browse courses”, “Open docs”). Use Tailwind classes for new variants (`inline-flex items-center rounded-full border px-6 py-2 text-xs tracking-[0.2em]` plus theme colors).
 - **Lists & code**: `.muted-list` keeps onboarding bullet points quiet; `.code-block` mirrors terminal snippets with `font-mono` and dark background.
