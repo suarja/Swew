@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\DeviceLoginRequest;
+use DateTimeImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -41,5 +42,16 @@ class DeviceLoginRequestRepository extends ServiceEntityRepository
         if ($flush) {
             $this->_em->flush();
         }
+    }
+
+    public function countPendingApprovals(DateTimeImmutable $now): int
+    {
+        return (int) $this->createQueryBuilder('request')
+            ->select('COUNT(request.id)')
+            ->andWhere('request.approvedAt IS NULL')
+            ->andWhere('request.expiresAt > :now')
+            ->setParameter('now', $now)
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 }

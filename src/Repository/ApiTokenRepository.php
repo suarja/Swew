@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\ApiToken;
+use DateTimeImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -32,5 +33,15 @@ class ApiTokenRepository extends ServiceEntityRepository
         $em = $this->getEntityManager();
         $em->persist($token);
         $em->flush();
+    }
+
+    public function countActiveTokens(DateTimeImmutable $now): int
+    {
+        return (int) $this->createQueryBuilder('token')
+            ->select('COUNT(token.id)')
+            ->andWhere('token.expiresAt IS NULL OR token.expiresAt > :now')
+            ->setParameter('now', $now)
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 }

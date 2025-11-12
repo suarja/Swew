@@ -3,26 +3,33 @@
 {% block title %}Device Approval · SWE Wannabe{% endblock %}
 
 {% block body %}
-    <section class="panel panel--hero">
-        <p class="panel__eyebrow">shell · device</p>
-        <h1 class="panel__title">Authorize CLI device</h1>
-        <p class="panel__subtitle">
-            Enter the code your terminal displayed. This links the CLI session to your account.
-        </p>
-    </section>
-
-    {% if message %}
-        <section class="panel {% if status == 'success' %}panel--note{% endif %}">
-            <p class="panel__title">{{ message }}</p>
+    <div class="page-stack">
+        <section class="card">
+            <p class="card-eyebrow">shell · device</p>
+            <h1 class="card-title" style="font-size:2rem;">Authorize CLI device</h1>
+            <p class="card-text">Enter the code your terminal displayed. This links the CLI session to your account.</p>
+            <pre class="code-block"><code>$ swew login
+&gt; enter CODE at https://localhost/device
+&gt; waiting for approval…</code></pre>
         </section>
-    {% endif %}
 
-    <section class="panel">
-        <form method="post" class="login-form">
-            <label for="user_code">Device code</label>
-            <input type="text" id="user_code" name="user_code" placeholder="ABCD-EFGH" required autofocus maxlength="9">
-            <input type="hidden" name="_csrf_token" value="{{ csrf_token('device_verify') }}">
-            <button class="login-submit" type="submit">Authorize</button>
-        </form>
-    </section>
+        {% if message %}
+            <div class="card">
+                {{ message }}
+            </div>
+        {% endif %}
+
+        <section class="card form-card">
+            <p class="card-eyebrow">device code</p>
+            <p class="card-text">Codes expire within ten minutes; re-run <code>swew login</code> if needed.</p>
+            <form method="post">
+                <div class="form-field">
+                    <label for="user_code">Device code</label>
+                    <input type="text" id="user_code" name="user_code" placeholder="ABCD-EFGH" maxlength="9" required autofocus>
+                </div>
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('device_verify') }}">
+                <button class="submit-button" type="submit">Authorize device</button>
+            </form>
+        </section>
+    </div>
 {% endblock %}

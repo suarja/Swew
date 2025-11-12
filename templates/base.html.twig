@@ -14,74 +14,49 @@
         {% endblock %}
     </head>
     {% set current_path = app.request ? app.request.pathinfo : '/' %}
-    <body class="app-shell" data-current-route="{{ current_path }}">
-        <div class="app-terminal">
-            <header class="terminal-chrome">
-                <div class="chrome-dots" aria-hidden="true">
-                    <span class="chrome-dot chrome-dot--close"></span>
-                    <span class="chrome-dot chrome-dot--minimize"></span>
-                    <span class="chrome-dot chrome-dot--maximize"></span>
-                </div>
-                <div class="chrome-path">~/dojo/swe-wannabe</div>
-                <div class="chrome-session">mentor@wannabe</div>
-            </header>
-            <div class="app-grid">
-                <aside class="app-panel app-nav" data-component="nav">
-                    <div class="brand-lockup">
-                        <span class="brand-lockup__title">SWE Wannabe</span>
-                        <p class="brand-lockup__tagline">Closer to the metal. Closer to mastery.</p>
-                    </div>
-                    <nav class="nav-list" aria-label="Primary">
-                        <a class="nav-link" href="/" data-route="/">
-                            Dashboard
-                            <span class="nav-link__hint">overview</span>
-                        </a>
-                        <a class="nav-link" href="/auth" data-route="/auth">
-                            Auth
-                            <span class="nav-link__hint">sessions</span>
-                        </a>
-                        <a class="nav-link" href="/device" data-route="/device">
-                            Device codes
-                            <span class="nav-link__hint">approve</span>
-                        </a>
-                        <a class="nav-link" href="/courses" data-route="/courses">
-                            Courses
-                            <span class="nav-link__hint">depth-first</span>
-                        </a>
-                        <a class="nav-link" href="/cli" data-route="/cli">
-                            CLI
-                            <span class="nav-link__hint">tooling</span>
-                        </a>
-                        <a class="nav-link" href="/docs" data-route="/docs">
-                            Docs
-                            <span class="nav-link__hint">reference</span>
-                        </a>
-                        <a class="nav-link" href="/profile" data-route="/profile">
-                            Profile
-                            <span class="nav-link__hint">account</span>
-                        </a>
+    {% set normalized_path = current_path == '' ? '/' : current_path %}
+    {% set nav_links = [
+        {'label': 'Home', 'href': '/', 'match': '/'},
+        {'label': 'Courses', 'href': '/courses', 'match': '/courses'},
+        {'label': 'CLI', 'href': '/cli', 'match': '/cli'},
+        {'label': 'Docs', 'href': '/docs', 'match': '/docs'},
+        {'label': 'Auth', 'href': '/auth', 'match': '/auth'},
+        {'label': 'Device', 'href': '/device', 'match': '/device'},
+        {'label': 'Profile', 'href': '/profile', 'match': '/profile'}
+    ] %}
+    <body class="min-h-screen bg-slate-50 text-slate-900">
+        <div class="flex min-h-screen flex-col">
+            <header class="app-header">
+                <div class="header-inner">
+                    <a href="/" class="brand-link">SWE Wannabe</a>
+                    <nav class="nav-links" aria-label="Primary">
+                        {% for link in nav_links %}
+                            {% set is_active = link.match == '/' ? normalized_path == '/' : normalized_path starts with link.match %}
+                            <a href="{{ link.href }}" class="nav-link {{ is_active ? 'is-active' : '' }}" {% if is_active %}aria-current="page"{% endif %}>{{ link.label }}</a>
+                        {% endfor %}
                     </nav>
-                    <div class="nav-footer">
-                        <span class="status-dot"></span>
-                        <span data-component="status-indicator" aria-live="polite">queue: idle</span>
-                    </div>
-                    {% if app.user %}
-                        <div class="nav-account">
-                            <div class="nav-account__meta">
-                                <p class="nav-account__name">{{ app.user.name }}</p>
-                                <p class="nav-account__email">{{ app.user.email }}</p>
-                            </div>
+                    <div class="flex items-center gap-3">
+                        <span class="status-indicator" data-component="status-indicator" aria-live="polite">queue · idle</span>
+                        {% if app.user %}
                             <form method="post" action="{{ path('app_logout') }}">
                                 <input type="hidden" name="_csrf_token" value="{{ csrf_token('logout') }}">
                                 <button class="logout-button" type="submit">logout</button>
                             </form>
-                        </div>
-                    {% endif %}
-                </aside>
-                <main class="app-panel app-main" data-component="route-host" data-current-route="{{ current_path }}">
+                        {% endif %}
+                    </div>
+                </div>
+            </header>
+            <main class="flex-1">
+                <div class="shell-container">
                     {% block body %}{% endblock %}
-                </main>
-            </div>
+                </div>
+            </main>
+            <footer class="app-footer">
+                <div class="footer-inner" style="display:flex;justify-content:space-between;align-items:center;font-size:0.75rem;color:var(--text-muted);">
+                    <span>CLI-first dojo · {{ 'now'|date('Y') }}</span>
+                    <span style="letter-spacing:0.3em;text-transform:uppercase;">/usr/local/dojo</span>
+                </div>
+            </footer>
         </div>
     </body>
 </html>

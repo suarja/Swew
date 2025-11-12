@@ -3,316 +3,57 @@
 {% block title %}Workbench · SWE Wannabe{% endblock %}
 
 {% block body %}
-    {% set current_path = app.request ? app.request.pathinfo : '/' %}
-    {% set normalized_path = current_path == '' ? '/' : current_path %}
-    {% set active_route = normalized_path == '/home' ? '/' : normalized_path %}
-    {% set known_routes = ['/', '/auth', '/device', '/courses', '/cli', '/docs', '/profile'] %}
+    <div class="page-stack">
+        <section class="card hero-card">
+            <p class="card-eyebrow">shell · workbench</p>
+            <h1 class="card-title">Build the hard parts with calm focus.</h1>
+            <p class="card-text">
+                Start in the CLI, mirror the same rituals on the web, and document every insight. This page stays minimal so you can launch into the next task without distraction.
+            </p>
+            <div style="display:flex;flex-wrap:wrap;gap:0.75rem;margin-top:1.5rem;">
+                <a class="pill-link primary" href="/courses">Browse courses</a>
+                <a class="pill-link" href="/docs">Open docs</a>
+                <a class="pill-link" href="/cli">View CLI rituals</a>
+            </div>
+        </section>
 
-    <div class="route-stack" data-component="route-stack">
-        <article class="route-view" data-route-view="/" {% if active_route != '/' %}hidden{% endif %}>
-            <section class="panel panel--hero">
-                <p class="panel__eyebrow">shell · dashboard</p>
-                <h1 class="panel__title">Learning by building the hard parts.</h1>
-                <p class="panel__subtitle">
-                    Strip away abstractions, ship with the same toolchain as the platform, and document every insight like a terminal lab notebook.
-                </p>
-            </section>
+        <section class="card">
+            <p class="card-eyebrow">start here</p>
+            <h2 class="card-title" style="font-size:1.25rem;">A quiet path to shippable practice</h2>
+            <p class="card-text">No dashboards to chase, just a steady rhythm:</p>
+            <ul class="muted-list">
+                <li>Read the brief in <code>docs/prd.md</code> and align on the slice.</li>
+                <li>Run <code>swew login</code> to pair your terminal, then approve the code on this page.</li>
+                <li>Stay in the CLI for tasks, but keep `/docs` open for reference.</li>
+                <li>Capture learnings in <code>docs/logs/</code> before ending the day.</li>
+            </ul>
+        </section>
 
-            <section class="panel">
-                <header class="panel__header">
-                    <div>
-                        <h2 class="panel__title">Live run state</h2>
-                        <p class="panel__subtitle">Values hydrate from LMS submissions + runner telemetry.</p>
-                    </div>
-                    <span class="panel__meta">data-source: lms.stream.status</span>
-                </header>
-                <div class="stat-grid">
-                    <article class="stat-card" data-field="active-course">
-                        <p class="stat-card__label">Active course</p>
-                        <p class="stat-card__value stat-card__value--muted">waiting for sync…</p>
-                        <p class="stat-card__hint">populated once /courses API responds</p>
-                    </article>
-                    <article class="stat-card" data-field="current-task">
-                        <p class="stat-card__label">Focused task</p>
-                        <p class="stat-card__value stat-card__value--muted">—</p>
-                        <p class="stat-card__hint">bound to learner context</p>
-                    </article>
-                    <article class="stat-card" data-field="runner-status">
-                        <p class="stat-card__label">Runner status</p>
-                        <p class="stat-card__value stat-card__value--muted">standby</p>
-                        <p class="stat-card__hint">Mercure event channel</p>
-                    </article>
-                </div>
-            </section>
+        <section class="card">
+            <p class="card-eyebrow">pillars</p>
+            <div class="card-grid">
+                <article class="feature-card">
+                    <h3 style="margin:0;font-size:1rem;">Authentication</h3>
+                    <p class="card-text">Session login + device codes mirror familiar OAuth flows without extra chrome.</p>
+                </article>
+                <article class="feature-card">
+                    <h3 style="margin:0;font-size:1rem;">Docs in sync</h3>
+                    <p class="card-text">Brand, product, and ops notes live together so the CLI and web story never drift.</p>
+                </article>
+                <article class="feature-card">
+                    <h3 style="margin:0;font-size:1rem;">CLI rituals</h3>
+                    <p class="card-text">Every route echoes a real command, keeping the experience familiar and calm.</p>
+                </article>
+            </div>
+        </section>
 
-            <section class="panel">
-                <header class="panel__header">
-                    <div>
-                        <h2 class="panel__title">How to spin up the dojo</h2>
-                        <p class="panel__subtitle">Every contributor uses the same CLI-first workflow.</p>
-                    </div>
-                </header>
-                <ul class="command-list">
-                    <li class="command">
-                        <div class="command__title">Bootstrap dependencies</div>
-                        <code class="command__code">composer install && docker compose build --pull --no-cache</code>
-                    </li>
-                    <li class="command">
-                        <div class="command__title">Start the stack</div>
-                        <code class="command__code">docker compose up --wait</code>
-                    </li>
-                    <li class="command">
-                        <div class="command__title">Enter the PHP container</div>
-                        <code class="command__code">docker exec -it app-php-1 bash</code>
-                    </li>
-                    <li class="command">
-                        <div class="command__title">Watch CLI assets</div>
-                        <code class="command__code">php bin/console typescript:build --watch</code>
-                    </li>
-                </ul>
-            </section>
-
-            <section class="panel panel--note">
-                <h2 class="panel__title">Principles of this build</h2>
-                <ul class="list-plain">
-                    <li>Keep new UI components minimal, monochrome, and copy-light—every label should feel like a command palette entry.</li>
-                    <li>Reference <code>docs/brand.md</code> and <code>docs/prd.md</code> before merging; update them if behavior shifts.</li>
-                    <li>Document each workflow slice (GitHub App, runner, Mercure events) directly inside pull requests.</li>
-                </ul>
-            </section>
-        </article>
-
-        <article class="route-view" data-route-view="/auth" {% if active_route != '/auth' %}hidden{% endif %}>
-            <section class="panel panel--hero">
-                <p class="panel__eyebrow">shell · authentication</p>
-                <h1 class="panel__title">Authentication flows</h1>
-                <p class="panel__subtitle">Split session UI from device approvals so each surface stays focused.</p>
-            </section>
-            <section class="panel">
-                <header class="panel__header">
-                    <div>
-                        <h2 class="panel__title">Session login (web)</h2>
-                        <p class="panel__subtitle">Classic Symfony form backed by rate limiting + CSRF.</p>
-                    </div>
-                    <span class="panel__meta">routes: /login, /logout</span>
-                </header>
-                <div class="stat-grid">
-                    <article class="stat-card">
-                        <p class="stat-card__label">Create an account</p>
-                        <p class="stat-card__value">php bin/console app:user:create</p>
-                        <p class="stat-card__hint">run inside the php container</p>
-                    </article>
-                    <article class="stat-card">
-                        <p class="stat-card__label">Login</p>
-                        <p class="stat-card__value">https://localhost/login</p>
-                        <p class="stat-card__hint">monospace terminal form</p>
-                    </article>
-                    <article class="stat-card">
-                        <p class="stat-card__label">Logout</p>
-                        <p class="stat-card__value">POST /logout</p>
-                        <p class="stat-card__hint">form button in sidebar</p>
-                    </article>
-                </div>
-            </section>
-            <section class="panel">
-                <header class="panel__header">
-                    <div>
-                        <h2 class="panel__title">API & CLI credentials</h2>
-                        <p class="panel__subtitle">Bearer tokens for REST + device-code CLI handshakes.</p>
-                    </div>
-                    <span class="panel__meta">doc: docs/auth.md</span>
-                </header>
-                <ul class="command-list">
-                    <li class="command">
-                        <div class="command__title">Mint a token</div>
-                        <code class="command__code">php bin/console app:token:create you@example.com cli</code>
-                    </li>
-                    <li class="command">
-                        <div class="command__title">Use the API</div>
-                        <code class="command__code">curl -H "Authorization: Bearer &lt;token&gt;" https://localhost/api/profile</code>
-                    </li>
-                    <li class="command">
-                        <div class="command__title">Device handshake</div>
-                        <code class="command__code">swew login → approve at https://localhost/device</code>
-                    </li>
-                </ul>
-            </section>
-            <section class="panel panel--note">
-                <h2 class="panel__title">Guardrails</h2>
-                <ul class="list-plain">
-                    <li>Session cookies remain HTTP-only, secure, and scoped to localhost; CLI tokens never share storage with the browser.</li>
-                    <li>Device approvals expire after a short TTL; rejected codes cannot be reused.</li>
-                    <li>Always export `SWEW_ACCEPT_SELF_SIGNED=1` when testing HTTPS from the CLI.</li>
-                </ul>
-            </section>
-        </article>
-
-        <article class="route-view" data-route-view="/device" {% if active_route != '/device' %}hidden{% endif %}>
-            <section class="panel panel--hero">
-                <p class="panel__eyebrow">shell · device codes</p>
-                <h1 class="panel__title">Device approval surface</h1>
-                <p class="panel__subtitle">Dedicated page for pairing the Ink CLI with the web session.</p>
-            </section>
-            <section class="panel">
-                <header class="panel__header">
-                    <div>
-                        <h2 class="panel__title">Flow</h2>
-                        <p class="panel__subtitle">Keep the CLI copy free of UI-only context.</p>
-                    </div>
-                    <span class="panel__meta">endpoints: /api/device-code · /device · /api/device-token</span>
-                </header>
-                <ol class="list-plain">
-                    <li>CLI runs <code>swew login</code> and receives a device code + verification URI.</li>
-                    <li>Learner opens this `/device` screen, enters the code, and approves the CLI.</li>
-                    <li>CLI polls `/api/device-token` until it receives a bearer token and stores it in `~/.swew/config.json`.</li>
-                </ol>
-            </section>
-            <section class="panel">
-                <header class="panel__header">
-                    <div>
-                        <h2 class="panel__title">UI blocks</h2>
-                        <p class="panel__subtitle">Wireframe the layout before hydrating with live data.</p>
-                    </div>
-                    <span class="panel__meta">status: waiting for data</span>
-                </header>
-                <div class="stat-grid">
-                    <article class="stat-card">
-                        <p class="stat-card__label">Pending approvals</p>
-                        <p class="stat-card__value stat-card__value--muted">0</p>
-                        <p class="stat-card__hint">placeholder until Mercure notifies</p>
-                    </article>
-                    <article class="stat-card">
-                        <p class="stat-card__label">Last approved device</p>
-                        <p class="stat-card__value stat-card__value--muted">—</p>
-                        <p class="stat-card__hint">populate from doctrine view</p>
-                    </article>
-                    <article class="stat-card">
-                        <p class="stat-card__label">CLI scope</p>
-                        <p class="stat-card__value">status.read</p>
-                        <p class="stat-card__hint">extend as features land</p>
-                    </article>
-                </div>
-            </section>
-            <section class="panel panel--note">
-                <h2 class="panel__title">Testing checklist</h2>
-                <ul class="list-plain">
-                    <li>Run <code>SWEW_ACCEPT_SELF_SIGNED=1 swew login</code>, approve the code, then verify <code>swew status</code>.</li>
-                    <li>Hit <code>GET /api/device-code</code> from curl to ensure rate limiting and TTL behave.</li>
-                    <li>Instrument Mercure topics so approvals can stream to this view in real time.</li>
-                </ul>
-            </section>
-        </article>
-
-        <article class="route-view" data-route-view="/courses" {% if active_route != '/courses' %}hidden{% endif %}>
-            <section class="panel panel--hero">
-                <p class="panel__eyebrow">shell · courses</p>
-                <h1 class="panel__title">Course map</h1>
-                <p class="panel__subtitle">Progression built around first-principles depth, not flashy demos.</p>
-            </section>
-            <section class="panel">
-                <header class="panel__header">
-                    <div>
-                        <h2 class="panel__title">LMS feed</h2>
-                        <p class="panel__subtitle">Courses render here after `/api/courses` responds.</p>
-                    </div>
-                    <span class="panel__meta">collection: courses</span>
-                </header>
-                <div class="empty-state" data-collection="courses">
-                    <p class="empty-state__label">No courses loaded.</p>
-                    <p class="empty-state__hint">Connect the LMS service or seed fixtures to preview the layout.</p>
-                </div>
-                <div class="data-grid" aria-live="polite"></div>
-            </section>
-        </article>
-
-        <article class="route-view" data-route-view="/cli" {% if active_route != '/cli' %}hidden{% endif %}>
-            <section class="panel panel--hero">
-                <p class="panel__eyebrow">shell · cli</p>
-                <h1 class="panel__title">CLI rituals</h1>
-                <p class="panel__subtitle">Every command reads like a lab notebook entry.</p>
-            </section>
-            <section class="panel">
-                <ul class="command-list">
-                    <li class="command">
-                        <div class="command__title">Login</div>
-                        <code class="command__code">swew login</code>
-                    </li>
-                    <li class="command">
-                        <div class="command__title">Task briefing</div>
-                        <code class="command__code">swew open &lt;task&gt;</code>
-                    </li>
-                    <li class="command">
-                        <div class="command__title">Doctor</div>
-                        <code class="command__code">swew doctor</code>
-                    </li>
-                    <li class="command">
-                        <div class="command__title">Status stream</div>
-                        <code class="command__code">swew status --watch</code>
-                    </li>
-                </ul>
-            </section>
-        </article>
-
-        <article class="route-view" data-route-view="/docs" {% if active_route != '/docs' %}hidden{% endif %}>
-            <section class="panel panel--hero">
-                <p class="panel__eyebrow">shell · documentation</p>
-                <h1 class="panel__title">Documentation uplink</h1>
-                <p class="panel__subtitle">Keep brand, product, and engineering specs in lockstep.</p>
-            </section>
-            <section class="panel">
-                <ul>
-                    <li><code>docs/brand.md</code> — tone, aesthetics, and audience cues.</li>
-                    <li><code>docs/prd.md</code> — MVP scope, system diagram, constraints.</li>
-                    <li><code>AGENTS.md</code> — contributor workflow, commands, and PR etiquette.</li>
-                </ul>
-            </section>
-        </article>
-
-        <article class="route-view" data-route-view="/profile" {% if active_route != '/profile' %}hidden{% endif %}>
-            <section class="panel panel--hero">
-                <p class="panel__eyebrow">shell · profile</p>
-                <h1 class="panel__title">Account overview</h1>
-                <p class="panel__subtitle">Session cookies keep you signed in on this browser. Revoke tokens to log out your CLI.</p>
-            </section>
-            <section class="panel">
-                <header class="panel__header">
-                    <div>
-                        <h2 class="panel__title">Identity</h2>
-                        <p class="panel__subtitle">Data pulled from Doctrine `user` table.</p>
-                    </div>
-                    <span class="panel__meta">role set</span>
-                </header>
-                <div class="stat-grid">
-                    <article class="stat-card">
-                        <p class="stat-card__label">Name</p>
-                        <p class="stat-card__value">{{ app.user.name }}</p>
-                    </article>
-                    <article class="stat-card">
-                        <p class="stat-card__label">Email</p>
-                        <p class="stat-card__value">{{ app.user.email }}</p>
-                    </article>
-                    <article class="stat-card">
-                        <p class="stat-card__label">Roles</p>
-                        <p class="stat-card__value">{{ app.user.roles|join(', ') }}</p>
-                    </article>
-                </div>
-            </section>
-            <section class="panel panel--note">
-                <h2 class="panel__title">CLI tokens</h2>
-                <p>Create or revoke tokens via <code>php bin/console app:token:create</code>. Tokens are hashed server-side and can be rotated any time.</p>
-                <ul class="list-plain">
-                    <li>Tokens authenticate requests to <code>/api/*</code> endpoints via `Authorization: Bearer &lt;token&gt;` headers.</li>
-                    <li>Device sessions (web) use secure, HTTP-only cookies scoped to <code>{{ app.request.host }}</code>.</li>
-                    <li>Revoke compromised tokens by deleting them in the DB or via a future admin UI.</li>
-                </ul>
-            </section>
-        </article>
-
-        <article class="route-view" data-route-view="__fallback" {% if active_route in known_routes %}hidden{% endif %}>
-            <section class="panel panel--hero">
-                <h1 class="panel__title">Route not instrumented</h1>
-                <p class="panel__subtitle">This path is not wired yet. Circle back to the roadmap in <code>docs/prd.md</code>.</p>
-            </section>
-        </article>
+        <section class="card">
+            <p class="card-eyebrow">quick peek</p>
+            <h2 class="card-title" style="font-size:1.25rem;">CLI pairing transcript</h2>
+            <pre class="code-block"><code>$ swew login
+&gt; requesting device code…
+&gt; enter CODE at https://localhost/device
+&gt; waiting for approval…</code></pre>
+        </section>
     </div>
 {% endblock %}
