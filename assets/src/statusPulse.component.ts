@@ -1,4 +1,4 @@
-const STATES = ["queue: idle", "queue: running checks", "queue: verdict ready"];
+const STATES = ["queue · idle", "queue · running checks", "queue · verdict ready"];
 
 let index = 0;
 

@@ -58,6 +58,11 @@ SWEW_ACCEPT_SELF_SIGNED=1 SWEW_BASE_URL=https://localhost swew status
 ```
 Set `SWEW_ACCEPT_SELF_SIGNED=1` if you want Node to ignore the local TLS certificate. The CLI stores tokens in `~/.swew/config.json`.
 
+### Admin Panel
+- EasyAdmin lives at `/admin` and is available only to `ROLE_ADMIN` accounts via Symfony Security.
+- Create an administrator with `docker compose exec php php bin/console app:user:create admin@example.com "Admin Name" "plain-password" --admin`.
+- Run every Doctrine/EasyAdmin command inside the PHP container so it can talk to the Postgres service (e.g., `docker compose exec php php bin/console doctrine:migrations:migrate`).
+
 ## Quality & Testing
 - PHPUnit suites live in `tests/`; mirror the `src/` structure (`App\Tests\Runner\JobDispatchTest`).
 - Run `vendor/bin/phpunit` inside the container. Add fixtures for Mercure/GitHub webhooks as needed.

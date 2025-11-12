@@ -9,6 +9,7 @@ Symfony app code sits in `src/` (PSR-4 `App\` namespace). Keep HTTP controllers,
 - `docker compose up --wait` — boot the FrankenPHP+Caddy stack plus Mercure/Postgres.
 - `docker exec -it app-php-1 bash` or `just container` — open a shell following the “mentor-learner” tone (all snippets we publish should mirror this CLI-first workflow).
 - `php bin/console typescript:build --watch` or `just build-ts` — rebuild Ink/CLI assets as you iterate on the terminal experience.
+- Run Doctrine commands **inside the php container** (e.g., `docker compose exec php php bin/console doctrine:migrations:diff`). We only support Postgres; do not point `DATABASE_URL` to SQLite or other fallbacks to “make commands work.”
 
 ## Coding Style & Naming Conventions
 Follow PSR-12, strict types, and prefer constructor injection. Symfony services use `FeatureManager`/`*Service` suffixes; HTTP controllers end with `Controller`. Twig blocks stay `snake_case`, while TypeScript modules are `kebab-case` files exporting PascalCase components/hooks. Preserve the terminal aesthetic described in `docs/brand.md` (monospace, minimal color) when adding UI copy or sample output. Run `php-cs-fixer fix` before committing and keep imports alphabetized.

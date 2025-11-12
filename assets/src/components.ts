@@ -1,7 +1,9 @@
 
+import { initStatusPulse } from "./statusPulse.component.ts";
+
 type Initializer = () => void;
 
-const INITIALIZERS: Initializer[] = [];
+const INITIALIZERS: Initializer[] = [initStatusPulse];
 
 export const mountClientComponents = (): void => {
     INITIALIZERS.forEach((init) => {
