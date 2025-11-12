@@ -144,4 +144,9 @@ class Course
 
         return $this;
     }
+
+    public function __toString(): string
+    {
+        return $this->title ?? sprintf('Course #%d', $this->id ?? 0);
+    }
 }

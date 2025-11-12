@@ -175,4 +175,9 @@ class Lesson
 
         return $this;
     }
+
+    public function __toString(): string
+    {
+        return $this->title ?? sprintf('Lesson #%d', $this->id ?? 0);
+    }
 }
