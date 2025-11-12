@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Lesson · {{ lesson.title }} · SWE Wannabe{% endblock %}
+
+{% block body %}
+    <div class="page-stack">
+        <section class="card hero-card">
+            <p class="card-eyebrow">{{ lesson.course ? lesson.course.title : 'lesson' }}</p>
+            <h1 class="card-title">{{ lesson.title }}</h1>
+            <p class="card-text">Sequence {{ '%02d'|format(lesson.sequence) }} · slug <code>{{ lesson.slug }}</code></p>
+            <p class="card-text" style="margin-top:1rem;max-width:60ch;">{{ lesson.summary ?? 'Summary coming soon.' }}</p>
+            <div style="display:flex;flex-wrap:wrap;gap:0.75rem;margin-top:1.5rem;">
+                <a class="pill-link primary" href="{{ path('app_courses') }}">Back to courses</a>
+                {% if lesson.course %}
+                    <a class="pill-link" href="{{ path('app_courses') }}#{{ lesson.course.slug }}">View course outline</a>
+                {% endif %}
+            </div>
+        </section>
+
+        <section class="card">
+            <p class="card-eyebrow">lesson content</p>
+            <article style="display:flex;flex-direction:column;gap:1rem;color:#0f172a;">
+                {% if lesson.content %}
+                    {{ lesson.content|nl2br }}
+                {% else %}
+                    <p class="card-text">Content drafting in progress. Capture notes in <code>docs/modules/</code> until the copy lands here.</p>
+                {% endif %}
+            </article>
+        </section>
+
+        <section class="card">
+            <p class="card-eyebrow">assignments</p>
+            <div class="flex flex-col gap-4">
+                {% for assignment in lesson.assignments %}
+                    <article class="rounded-2xl border border-slate-200/80 bg-white/90 p-5">
+                        <div class="flex flex-col gap-1">
+                            <div class="flex items-baseline justify-between gap-3">
+                                <a class="font-semibold tracking-tight" href="{{ path('app_assignments_show', { code: assignment.code }) }}">
+                                    {{ assignment.code }} · {{ assignment.title }}
+                                </a>
+                                <span class="text-xs font-mono uppercase tracking-[0.2em] text-slate-500">{{ assignment.displayOrder|default(0) }}</span>
+                            </div>
+                            <p class="card-text" style="margin:0;">{{ assignment.description ?? 'Description coming soon.' }}</p>
+                        </div>
+                        {% if assignment.cliSteps %}
+                            <div style="margin-top:1rem;">
+                                <p class="card-eyebrow" style="margin-bottom:0.5rem;">cli ritual</p>
+                                <pre class="code-block"><code>{{ assignment.cliSteps }}</code></pre>
+                            </div>
+                        {% endif %}
+                    </article>
+                {% else %}
+                    <p class="card-text">No assignments yet. Add them in <code>/admin</code> to expose the CLI prompts.</p>
+                {% endfor %}
+            </div>
+        </section>
+    </div>
+{% endblock %}

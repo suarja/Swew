@@ -32,9 +32,9 @@ final class LoginFlowTest extends WebTestCase
 
         $crawler = $client->request('GET', '/login');
         self::assertResponseIsSuccessful();
-        self::assertSelectorTextContains('h1', 'Authenticate');
+        self::assertSelectorTextContains('h1.card-title', 'Authenticate');
 
-        $form = $crawler->selectButton('enter')->form([
+        $form = $crawler->selectButton('Enter workspace')->form([
             '_username' => 'test@example.com',
             '_password' => 'secret',
         ]);
@@ -43,6 +43,6 @@ final class LoginFlowTest extends WebTestCase
         $client->followRedirect();
 
         self::assertResponseIsSuccessful();
-        self::assertSelectorTextContains('.panel__title', 'Learning by building the hard parts.');
+        self::assertSelectorTextContains('h1.card-title', 'Build the hard parts with calm focus.');
     }
 }

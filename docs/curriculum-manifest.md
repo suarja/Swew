@@ -66,7 +66,7 @@ Software engineering feels abstracted to the point where even experienced devs s
 1. **Prototype Act I**: fully script the Shell & Environment Lab (lessons, CLI tasks, grading hooks) and load it through the admin UI.
 2. **Ship Runtime Explorer MVP**: at least two Node-under-the-hood exercises with reflections.
 3. **Instrument Storytelling Loop**: enable reflection submissions to appear in the dashboard, reinforcing the public learning log.
-4. **API/CLI sync**: expose `/api/courses/*` endpoints + CLI download commands that pull from the database so Markdown specs stay in sync automatically.
+4. **API/CLI sync (shipped)**: `/api/courses`, `/api/lessons/{slug}`, and `/api/assignments/{code}` drive both the Twig catalog and the `swew courses` command, keeping Markdown manifests strictly as planning docs.
 5. **Expand Systems & Architecture tracks** once the CLI workflow is validated and content cadence feels sustainable.
 
 ## 9. Tone & Voice Reminders

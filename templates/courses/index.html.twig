@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Courses · SWE Wannabe{% endblock %}
+
+{% block body %}
+    <div class="page-stack">
+        <section class="card hero-card">
+            <p class="card-eyebrow">courses</p>
+            <h1 class="card-title">Pick the next lab from the live catalog.</h1>
+            <p class="card-text">
+                Lessons, assignments, and CLI rituals now pull straight from Postgres via the EasyAdmin forms.
+                Each course below links into the same specs your terminal will download, so the story never drifts from web to CLI.
+            </p>
+            <div style="display:flex;flex-wrap:wrap;gap:0.75rem;margin-top:1.5rem;">
+                <a class="pill-link primary" href="/docs">Open docs</a>
+                <a class="pill-link" href="/cli">Review CLI rituals</a>
+            </div>
+        </section>
+
+        <section class="card">
+            <p class="card-eyebrow">catalog</p>
+            {% if courses|length > 0 %}
+                <div class="flex flex-col gap-6">
+                    {% for course in courses %}
+                        <article id="{{ course.slug }}" class="rounded-2xl border border-slate-200/70 bg-white/90 p-6 shadow-sm">
+                            <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+                                <div>
+                                    <h2 style="margin:0;font-size:1.5rem;" class="card-title">{{ course.title }}</h2>
+                                    <p class="card-text" style="margin-top:0.5rem;max-width:60ch;">{{ course.summary ?? 'Summary coming soon.' }}</p>
+                                </div>
+                                <div class="flex flex-wrap gap-2 text-xs uppercase tracking-[0.3em] text-slate-500">
+                                    <span class="inline-flex items-center gap-2 rounded-full border border-slate-900/30 px-3 py-1 font-mono text-[0.65rem]">{{ course.status|upper }}</span>
+                                    <span class="inline-flex items-center gap-2 rounded-full border border-slate-900/30 px-3 py-1 font-mono text-[0.65rem]">{{ course.lessonCount }} lessons</span>
+                                </div>
+                            </div>
+                            <div class="mt-5">
+                                <p class="card-eyebrow" style="margin-bottom:0.75rem;">lessons</p>
+                                <ol class="flex flex-col gap-3">
+                                    {% for lesson in course.lessons %}
+                                        <li class="rounded-xl border border-slate-200/80 bg-white/80 p-4 transition hover:border-slate-900/40">
+                                            <div class="flex flex-col gap-1">
+                                                <div class="flex items-baseline justify-between gap-3">
+                                                    <a class="font-semibold tracking-tight" href="{{ path('app_lessons_show', { slug: lesson.slug }) }}">
+                                                        {{ '%02d'|format(lesson.sequence) }} · {{ lesson.title }}
+                                                    </a>
+                                                    <span class="text-xs font-mono uppercase tracking-[0.2em] text-slate-500">{{ lesson.slug }}</span>
+                                                </div>
+                                                <p class="card-text" style="margin:0;">{{ lesson.summary ?? 'Lesson content coming soon.' }}</p>
+                                            </div>
+                                        </li>
+                                    {% else %}
+                                        <li class="rounded-xl border border-dashed border-slate-200 p-4 text-sm text-slate-500">No lessons yet.</li>
+                                    {% endfor %}
+                                </ol>
+                            </div>
+                        </article>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="card-text">No live courses yet. Seed the catalog in <code>/admin</code> to surface content here.</p>
+            {% endif %}
+        </section>
+    </div>
+{% endblock %}

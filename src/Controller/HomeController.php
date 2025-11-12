@@ -13,7 +13,7 @@ final class HomeController extends AbstractController
         path: '/{reactRouting}',
         name: 'app_shell',
         requirements: [
-            'reactRouting' => '^(?!(styles|src|build|assets|_profiler|_wdt|favicon\\.ico|login|logout|device)).*$',
+            'reactRouting' => '^(?!(styles|src|build|assets|_profiler|_wdt|favicon\\.ico|login|logout|device|courses|lessons|assignments)).*$',
         ],
         defaults: ['reactRouting' => null],
         methods: ['GET']

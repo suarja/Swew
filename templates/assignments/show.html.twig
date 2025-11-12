@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Assignment · {{ assignment.code }} · SWE Wannabe{% endblock %}
+
+{% block body %}
+    <div class="page-stack">
+        <section class="card hero-card">
+            <p class="card-eyebrow">{{ assignment.course ? assignment.course.title : 'assignment' }}</p>
+            <h1 class="card-title">{{ assignment.code }} · {{ assignment.title }}</h1>
+            <p class="card-text" style="margin-top:1rem;max-width:60ch;">{{ assignment.description ?? 'Description coming soon.' }}</p>
+            <div style="display:flex;flex-wrap:wrap;gap:0.75rem;margin-top:1.5rem;">
+                {% if assignment.lesson %}
+                    <a class="pill-link primary" href="{{ path('app_lessons_show', { slug: assignment.lesson.slug }) }}">Back to lesson</a>
+                {% endif %}
+                <a class="pill-link" href="{{ path('app_courses') }}">Browse courses</a>
+            </div>
+        </section>
+
+        <section class="card">
+            <p class="card-eyebrow">cli ritual</p>
+            {% if assignment.cliSteps %}
+                <pre class="code-block"><code>{{ assignment.cliSteps }}</code></pre>
+            {% else %}
+                <p class="card-text">CLI steps will appear once the assignment spec is finalized.</p>
+            {% endif %}
+        </section>
+
+        <section class="card">
+            <p class="card-eyebrow">evaluation notes</p>
+            {% if assignment.evaluationNotes %}
+                <pre class="code-block"><code>{{ assignment.evaluationNotes }}</code></pre>
+            {% else %}
+                <p class="card-text">Add evaluator notes in the admin once the rubric is ready.</p>
+            {% endif %}
+        </section>
+    </div>
+{% endblock %}

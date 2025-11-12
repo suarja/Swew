@@ -55,6 +55,7 @@ npm run build
 npm link # or npm install -g file:./swew
 SWEW_ACCEPT_SELF_SIGNED=1 SWEW_BASE_URL=https://localhost swew login
 SWEW_ACCEPT_SELF_SIGNED=1 SWEW_BASE_URL=https://localhost swew status
+SWEW_ACCEPT_SELF_SIGNED=1 SWEW_BASE_URL=https://localhost swew courses
 ```
 Set `SWEW_ACCEPT_SELF_SIGNED=1` if you want Node to ignore the local TLS certificate. The CLI stores tokens in `~/.swew/config.json`.
 
@@ -62,6 +63,12 @@ Set `SWEW_ACCEPT_SELF_SIGNED=1` if you want Node to ignore the local TLS certifi
 - EasyAdmin lives at `/admin` and is available only to `ROLE_ADMIN` accounts via Symfony Security.
 - Create an administrator with `docker compose exec php php bin/console app:user:create admin@example.com "Admin Name" "plain-password" --admin`.
 - Run every Doctrine/EasyAdmin command inside the PHP container so it can talk to the Postgres service (e.g., `docker compose exec php php bin/console doctrine:migrations:migrate`).
+
+## Curriculum APIs & Catalog
+- `GET /api/courses` — list `live` + `preview` courses with ordered lessons.
+- `GET /api/lessons/{slug}` — lesson detail with full text and assignment specs.
+- `GET /api/assignments/{code}` — assignment detail plus lesson/course context.
+- The Twig shell exposes the same data at `/courses`, `/lessons/{slug}`, and `/assignments/{code}` and the Ink CLI surfaces it via `swew courses`. Authenticate with the same bearer tokens used by `swew status`.
 
 ## Quality & Testing
 - PHPUnit suites live in `tests/`; mirror the `src/` structure (`App\Tests\Runner\JobDispatchTest`).
