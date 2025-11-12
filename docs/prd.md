@@ -22,7 +22,7 @@ Core Use Cases 1. Start: Connect GitHub → pick course/task → get repo link. 
 
 MVP Feature Set
 • CLI: login, status, doctor, open <task> (fetch & display task), basic config.
-• Web: Sign-in, dashboard (courses/tasks), task page (text/video), progress page.
+• Web: Sign-in, dashboard (courses/tasks), dedicated Auth + Device approval screens, profile, and task/progress pages (all sharing the terminal shell).
 • Backend: GitHub App integration, webhook intake, job queue trigger, grading results, Mercure events.
 • Runner: Docker-per-job execution, pinned images per task, logs & verdict.
 • Content model: Lessons stored in Symfony DB (simple authoring in admin); repos are templates only (tests + scaffolding).
@@ -30,7 +30,7 @@ MVP Feature Set
 System Overview (chosen building blocks)
 • Backend: Symfony (Dunglas template: FrankenPHP, Caddy, Mercure).
 • Submission: GitHub App, push webhook → enqueue grading.
-• Realtime: Mercure SSE, with poll fallback.
+• Realtime: Mercure SSE (Caddy hub + Symfony Mercure bundle already wired), with poll fallback.
 • Runner: Single VPS; Docker-per-job; logs to DB/object store (TBD).
 • CLI: Node + TypeScript + Ink (React-for-CLI).
 • DB: Postgres (users, courses, tasks, submissions, progress).

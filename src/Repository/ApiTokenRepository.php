@@ -29,7 +29,8 @@ class ApiTokenRepository extends ServiceEntityRepository
 
     public function save(ApiToken $token): void
     {
-        $this->_em->persist($token);
-        $this->_em->flush();
+        $em = $this->getEntityManager();
+        $em->persist($token);
+        $em->flush();
     }
 }

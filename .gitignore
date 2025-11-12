@@ -20,5 +20,5 @@
 ###< phpunit/phpunit ###
 
 # CLI workspace
-/cli/node_modules/
-/cli/.npmrc
+/swew/node_modules/
+/swew/.npmrc

@@ -10,19 +10,10 @@ const emitNavigation = (path: string): void => {
 
 export const Router: IRouter = {
     init() {
-        document.querySelectorAll(".nav-link").forEach((anchor) => {
-            anchor.addEventListener("click", (event) => {
-                event.preventDefault();
-                console.log(
-                    "Router: navigating to",
-                    anchor.getAttribute("href"),
-                );
-            });
+        window.addEventListener("popstate", () => {
+            emitNavigation(window.location.pathname || "/");
         });
-        //     window.addEventListener("popstate", () => {
-        //         emitNavigation(window.location.pathname);
-        //     });
-        //     emitNavigation(window.location.pathname);
+        emitNavigation(window.location.pathname || "/");
     },
     getCurrentPath() {
         return window.location.pathname;
