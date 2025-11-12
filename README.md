@@ -11,7 +11,7 @@ This repo hosts the Symfony backend that powers the SWE Wannabe learning environ
 - **CLI**: Node/TypeScript (Ink) assets compiled from `assets/src`.
 - **Data**: Postgres (Dockerized in `compose.yaml`) for users/courses/tasks/submissions; Doctrine handles persistence.
 - **Runner**: Docker job worker triggered via GitHub webhooks (single VPS assumption).
-- **Docs**: `docs/brand.md` (tone) + `docs/prd.md` (functional spec) + `docs/app-shell.md` (SPA shell) + `AGENTS.md` (contrib guide).
+- **Docs**: `docs/brand.md` (tone) + `docs/prd.md` (functional spec) + `docs/app-shell.md` (server-rendered shell) + `AGENTS.md` (contrib guide).
 
 ## Local Development
 1. Install Docker, Docker Compose v2.10+, and Composer 2.
@@ -63,29 +63,31 @@ Set `SWEW_ACCEPT_SELF_SIGNED=1` if you want Node to ignore the local TLS certifi
 - Run `vendor/bin/phpunit` inside the container. Add fixtures for Mercure/GitHub webhooks as needed.
 - Follow the Conventional Commits flow and PR expectations documented in `AGENTS.md`.
 
+
 ## Contributing
 Start with `AGENTS.md` for coding standards, naming conventions, and PR checklists. Align any user-facing output with the brand sheet, and log PR links back to specific PRD sections (e.g., “MVP Feature Set → CLI”). When in doubt, update `docs/brand.md` or `docs/prd.md` so future iterations stay grounded in the same story.
 
 ## App Shell Reference
-- The full description of the modular layout, router, and client components lives in `docs/app-shell.md`.
+- `docs/app-shell.md` covers the server-rendered layout, Tailwind token usage, and the tiny vanilla enhancers that sit on top.
 - Quick summary:
-  - Symfony serves a single Twig shell for all non-static routes.
-  - `window.app.router` intercepts navigation, emits `router:navigate` (including `popstate`), and keeps the sidebar + views in sync.
-  - Route-specific panels are rendered as `<article data-route-view="…">` blocks so we can hydrate them with server or client data later.
+  - Every route is rendered via Twig (no SPA router). Templates compose shared panels and Tailwind utilities.
+  - Client JavaScript is opt-in; we only mount lightweight controllers (e.g., status indicator) that listen for DOM events.
+  - Design tokens and reusable pieces live in `assets/styles/app.css` plus Twig partials, so routes stay consistent without a heavy front-end framework.
 
 ## Asset Build Tips
 - The TypeScript bundle (powered by `sensiolabs/typescript-bundle`) must be compiled whenever you add or rename files under `assets/src/`. Use `docker compose exec php php bin/console typescript:build --watch` during development.
-- If you see circular-reference errors such as `app.js -> src/app.ts -> src/components.ts -> app.js` or missing compiled files (`components.js`), clear the Symfony cache and recompile the asset map:
+- Tailwind + base styles live in `assets/styles/app.css`. Run `php bin/console tailwind:build --watch` (or `TAILWIND_DISABLE_WATCHER=1 php bin/console tailwind:build` on environments where Bun’s watcher cannot start) so `var/tailwind/app.built.css` stays fresh.
+- After either JS or CSS assets change, rebuild the Asset Mapper output so Twig serves the new hashed files:
   ```
   docker compose exec php php bin/console cache:clear
   docker compose exec php php bin/console asset-map:compile
   ```
-  This rebuilds the SWC output under `public/assets` so the import map points to the latest JavaScript.
+  This rewrites the import map plus `public/assets/styles/app-*.css`, ensuring the shell picks up the newest Tailwind tokens and component layer.
 
 ## TODO / Roadmap
-1. **Shell navigation & flows** — Finish wiring discrete SPA views for Dashboard, Auth, Device Codes, Courses, CLI, Docs, and Profile. Replace placeholder copy with real data, polish the terminal chrome, and ensure router/back-button parity.
+1. **Shell navigation & flows** — Finish wiring discrete Twig pages for Dashboard, Auth, Device Codes, Courses, CLI, Docs, and Profile. Replace placeholder copy with real data, polish the terminal chrome, and keep navigation/server routing in sync.
 2. **Auth & device approvals** — Land the `/auth` and `/device` forms (session login, token minting, device-code approvals), add fixtures/tests, and make the CLI’s `login/status` commands exercise the full flow end-to-end.
 3. **Mercure streams** — Connect Doctrine/domain events to Mercure topics (status, device approvals, runner heartbeats), add subscriber utilities, and expose hooks in the Dashboard + Device views with graceful polling fallbacks.
-4. **Admin + LMS CRUD** — Scaffold an operator surface for Courses/Lessons/Tasks/Rubrics plus REST endpoints consumed by both the SPA and CLI.
+4. **Admin + LMS CRUD** — Scaffold an operator surface for Courses/Lessons/Tasks/Rubrics plus REST endpoints consumed by both the web shell and CLI.
 5. **Database & migrations** — Lock the schema for auth, LMS, runner logs, and device approvals; provide seed data + migration scripts for dev/test.
 6. **Ink CLI expansion** — Build out `swew doctor`, `swew open`, and GitHub App onboarding flows, keeping Ink components modular and matching the voice defined in `docs/brand.md`.

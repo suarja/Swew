@@ -54,3 +54,9 @@ Risks
 • Content/lesson drift vs template tests (keep tight versioning per course).
 
 Open Questions (to confirm next) 1. Repo layout: per-task repo vs per-course repo (one repo, subfolders)? 2. Trigger: grade on push to default branch (KISS) or PR/tag? 3. CLI local checks: include swew test (run repo tests locally) in MVP? 4. Progress granularity: per-stage milestones (pass/fail) vs single score?
+
+Roadmap Addendum – Web Companion
+1. **Server-rendered shell (now)**: replace the pseudo-SPA router with classic Symfony routes + Twig views so every URL is first-class, SEO-friendly, and easier to test.
+2. **Tailwind adoption (shipped)**: the calm “card stack” aesthetic now lives in `assets/styles/app.css` (with `@import "tailwindcss"`). Keep `php bin/console tailwind:build --watch` running while touching CSS, then run `php bin/console asset-map:compile` so the hashed stylesheet in `public/assets/styles/` reflects the latest utilities. See `docs/style-guide.md` for the living component spec.
+3. **Progressive data hydration (next)**: expose JSON endpoints for dashboard stats/device approvals and attach lightweight vanilla controllers (no frameworks) that hydrate panels when visible.
+4. **Accessibility sweep (later)**: audit pages with Axe + keyboard-only passes, ensuring Tailwind component variants meet WCAG contrast + focus requirements.
