@@ -55,19 +55,28 @@ Software engineering feels abstracted to the point where even experienced devs s
 - **Reflection Checks**: qualitative rubrics (clarity, completeness, honesty) applied to Feynman write-ups; early versions may be self-scored to reinforce honesty.
 
 ## 7. Content Production Workflow
-1. **Lesson Drafting**: write text + short video script per lesson, anchoring tone in `docs/brand.md`.
+1. **Lesson Drafting**: write Markdown content + a short (optional) video per lesson, anchoring tone in `docs/brand.md`. Markdown keeps the writing flow fast; the optional `videoUrl` lets Twig embed a player without extra tooling.
 2. **Admin Data Entry**: create/update Courses, Lessons, and Assignments via the EasyAdmin `/admin` dashboard (ROLE_ADMIN). Markdown manifests stay as planning docs, but Postgres is now the source of truth.
-3. **CLI Assignment Spec**: define metadata (ID, prompts, evaluator command, reflection requirements) and store centrally (e.g., `docs/prd.md` extension) before importing it into the admin UI.
-4. **Fixture Packaging**: bundle tasks/tests into CLI-deliverable zips; keep runtime dependencies minimal.
+3. **CLI Assignment Spec**: define metadata (ID, prompts, evaluator command, reflection requirements) and store it alongside the CLI source (`swew/source/assignments/<code>`). EasyAdmin still mirrors the high-level copy for the web, but the CLI manifest is now canonical for evaluator behavior.
+4. **Assignment Kits**: each assignment folder holds a `manifest.ts`, run scripts, and fixtures. Kits compile into the CLI binary so learners work offline; bump the manifest + CLI versions whenever the evaluator changes.
 5. **Progress Tracking**: ensure each assignment posts checkpoints to the API, unlocking downstream lessons.
 6. **Narrative Updates**: after shipping a chapter, publish a brief field note summarizing what was learned and what’s next.
+
+### Assignment Kit Anatomy
+- `manifest.ts` exports metadata (code, title, lesson reference, CLI ritual copy, evaluator entry function, prompts, minimum CLI version, expected duration).
+- `run.ts`/`run.mjs` executes the local evaluator (shell scripts, Node tests, etc.) and returns structured results to the manifest.
+- Optional helpers (fixtures, data files) live beside the manifest so everything is version-controlled with the CLI source.
+- At build time we generate an `assignments/index.ts` that registers every manifest. `swew submit` loads from that registry, so no network fetch is needed to start an assignment.
+- Because kits are baked into releases, `POST /api/submissions` receives both the CLI version and kit version to detect stale binaries once we deprecate them.
 
 ## 8. Roadmap (High-Level)
 1. **Prototype Act I**: fully script the Shell & Environment Lab (lessons, CLI tasks, grading hooks) and load it through the admin UI.
 2. **Ship Runtime Explorer MVP**: at least two Node-under-the-hood exercises with reflections.
 3. **Instrument Storytelling Loop**: enable reflection submissions to appear in the dashboard, reinforcing the public learning log.
 4. **API/CLI sync (shipped)**: `/api/courses`, `/api/lessons/{slug}`, and `/api/assignments/{code}` drive both the Twig catalog and the `swew courses` command, keeping Markdown manifests strictly as planning docs.
-5. **Expand Systems & Architecture tracks** once the CLI workflow is validated and content cadence feels sustainable.
+5. **CLI assignment kits (next)**: move specs/tests into the CLI source tree, add `swew submit`, and rely on `/api/progress` + `/api/submissions` for syncing rather than `swew open`.
+6. **Progressive hydration + accessibility**: once CLI parity lands, enhance the dashboard/device panels with on-demand fetch widgets and schedule the accessibility sweep outlined in `docs/style-guide.md`.
+7. **Expand Systems & Architecture tracks** once the CLI workflow is validated and content cadence feels sustainable.
 
 ## 9. Tone & Voice Reminders
 - Calm, precise, slightly dry humor.

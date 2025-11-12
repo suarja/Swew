@@ -8,10 +8,10 @@ This repo hosts the Symfony backend that powers the SWE Wannabe learning environ
 
 ## Architecture Snapshot
 - **Backend**: Symfony 7 + FrankenPHP + Caddy, with Mercure for server-sent events.
-- **CLI**: Node/TypeScript (Ink) assets compiled from `assets/src`.
+- **CLI**: Node/TypeScript (Ink) app in `swew/`, now shipping assignment kits (`swew/source/assignments/<code>`) compiled straight into the binary so learners can work offline.
 - **Data**: Postgres (Dockerized in `compose.yaml`) for users/courses/tasks/submissions; Doctrine handles persistence.
 - **Runner**: Docker job worker triggered via GitHub webhooks (single VPS assumption).
-- **Docs**: `docs/brand.md` (tone) + `docs/prd.md` (functional spec) + `docs/app-shell.md` (server-rendered shell) + `AGENTS.md` (contrib guide).
+- **Docs**: `docs/brand.md` (tone) + `docs/prd.md` (functional spec) + `docs/app-shell.md` (server-rendered shell) + `docs/cli-assignment-kits.md` (CLI kit plan) + `AGENTS.md` (contrib guide).
 
 ## Local Development
 1. Install Docker, Docker Compose v2.10+, and Composer 2.
@@ -59,6 +59,12 @@ SWEW_ACCEPT_SELF_SIGNED=1 SWEW_BASE_URL=https://localhost swew courses
 ```
 Set `SWEW_ACCEPT_SELF_SIGNED=1` if you want Node to ignore the local TLS certificate. The CLI stores tokens in `~/.swew/config.json`.
 
+### CLI Assignment Kits (WIP)
+- Assignment specs + evaluator scripts live under `swew/source/assignments/<code>/`. Each folder exports a `manifest.ts` that includes metadata (title, ritual copy, prompts, evaluator entry file, minimum CLI version) plus the Node/bash scripts needed to grade locally.
+- The build step bundles every manifest into the CLI. The upcoming `swew submit` command will look up the next unlocked assignment (via `/api/progress`), run the manifest’s evaluator, prompt for any reflections, then POST a JSON payload to `/api/submissions`.
+- Because kits are part of the CLI artifact, we track both CLI version and kit version in submission payloads. When an assignment kit changes, we cut a new CLI release instead of pushing S3 downloads.
+- The web shell still pulls lesson/course copy from Postgres; assignments in the DB remain the public-facing spec. The CLI manifest is the source of truth for evaluator behavior.
+
 ### Admin Panel
 - EasyAdmin lives at `/admin` and is available only to `ROLE_ADMIN` accounts via Symfony Security.
 - Create an administrator with `docker compose exec php php bin/console app:user:create admin@example.com "Admin Name" "plain-password" --admin`.
@@ -102,4 +108,6 @@ Start with `AGENTS.md` for coding standards, naming conventions, and PR checklis
 3. **Mercure streams** — Connect Doctrine/domain events to Mercure topics (status, device approvals, runner heartbeats), add subscriber utilities, and expose hooks in the Dashboard + Device views with graceful polling fallbacks.
 4. **Admin + LMS CRUD** — Scaffold an operator surface for Courses/Lessons/Tasks/Rubrics plus REST endpoints consumed by both the web shell and CLI.
 5. **Database & migrations** — Lock the schema for auth, LMS, runner logs, and device approvals; provide seed data + migration scripts for dev/test.
-6. **Ink CLI expansion** — Build out `swew doctor`, `swew open`, and GitHub App onboarding flows, keeping Ink components modular and matching the voice defined in `docs/brand.md`.
+6. **Ink CLI expansion** — Build out `swew doctor`, `swew submit`, and GitHub App onboarding flows, keeping Ink components modular and matching the voice defined in `docs/brand.md`. Assignment kits now live in the CLI repo, so new lessons require a CLI release plus EasyAdmin updates.
+7. **Lesson detail polish** — Render lesson content as Markdown, add an optional `videoUrl` embed, and ensure the Twig layout mirrors the calm learning aesthetic described in `docs/brand.md`.
+8. **Progress & submission lifecycle** — Implement `/api/progress` + `/api/submissions`, persist `Submission` entities, and wire Mercure topics so both CLI and Twig dashboards stay synced per the plan in `docs/prd.md`.
