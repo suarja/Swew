@@ -36,7 +36,6 @@
                         {% endfor %}
                     </nav>
                     <div class="flex items-center gap-3">
-                        <span class="status-indicator" data-component="status-indicator" aria-live="polite">queue · idle</span>
                         {% if app.user %}
                             <form method="post" action="{{ path('app_logout') }}">
                                 <input type="hidden" name="_csrf_token" value="{{ csrf_token('logout') }}">
