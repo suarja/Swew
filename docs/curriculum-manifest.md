@@ -56,16 +56,18 @@ Software engineering feels abstracted to the point where even experienced devs s
 
 ## 7. Content Production Workflow
 1. **Lesson Drafting**: write text + short video script per lesson, anchoring tone in `docs/brand.md`.
-2. **CLI Assignment Spec**: define metadata (ID, prompts, evaluator command, reflection requirements) and store centrally (e.g., `docs/prd.md` extension).
-3. **Fixture Packaging**: bundle tasks/tests into CLI-deliverable zips; keep runtime dependencies minimal.
-4. **Progress Tracking**: ensure each assignment posts checkpoints to the API, unlocking downstream lessons.
-5. **Narrative Updates**: after shipping a chapter, publish a brief field note summarizing what was learned and what’s next.
+2. **Admin Data Entry**: create/update Courses, Lessons, and Assignments via the EasyAdmin `/admin` dashboard (ROLE_ADMIN). Markdown manifests stay as planning docs, but Postgres is now the source of truth.
+3. **CLI Assignment Spec**: define metadata (ID, prompts, evaluator command, reflection requirements) and store centrally (e.g., `docs/prd.md` extension) before importing it into the admin UI.
+4. **Fixture Packaging**: bundle tasks/tests into CLI-deliverable zips; keep runtime dependencies minimal.
+5. **Progress Tracking**: ensure each assignment posts checkpoints to the API, unlocking downstream lessons.
+6. **Narrative Updates**: after shipping a chapter, publish a brief field note summarizing what was learned and what’s next.
 
 ## 8. Roadmap (High-Level)
-1. **Prototype Act I**: fully script the Shell & Environment Lab (lessons, CLI tasks, grading hooks).
+1. **Prototype Act I**: fully script the Shell & Environment Lab (lessons, CLI tasks, grading hooks) and load it through the admin UI.
 2. **Ship Runtime Explorer MVP**: at least two Node-under-the-hood exercises with reflections.
 3. **Instrument Storytelling Loop**: enable reflection submissions to appear in the dashboard, reinforcing the public learning log.
-4. **Expand Systems & Architecture tracks** once the CLI workflow is validated and content cadence feels sustainable.
+4. **API/CLI sync**: expose `/api/courses/*` endpoints + CLI download commands that pull from the database so Markdown specs stay in sync automatically.
+5. **Expand Systems & Architecture tracks** once the CLI workflow is validated and content cadence feels sustainable.
 
 ## 9. Tone & Voice Reminders
 - Calm, precise, slightly dry humor.

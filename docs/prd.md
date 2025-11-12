@@ -23,9 +23,10 @@ Core Use Cases 1. Start: Connect GitHub → pick course/task → get repo link. 
 MVP Feature Set
 • CLI: login, status, doctor, open <task> (fetch & display task), basic config.
 • Web: Sign-in, dashboard (courses/tasks), dedicated Auth + Device approval screens, profile, and task/progress pages (all sharing the terminal shell).
+• Admin: EasyAdmin-powered `/admin` console (ROLE_ADMIN) to CRUD Courses → Lessons → Assignments so module specs live in Postgres instead of Markdown.
 • Backend: GitHub App integration, webhook intake, job queue trigger, grading results, Mercure events.
 • Runner: Docker-per-job execution, pinned images per task, logs & verdict.
-• Content model: Lessons stored in Symfony DB (simple authoring in admin); repos are templates only (tests + scaffolding).
+• Content model: Lessons stored in Symfony DB (authored via admin); repos are templates only (tests + scaffolding).
 
 System Overview (chosen building blocks)
 • Backend: Symfony (Dunglas template: FrankenPHP, Caddy, Mercure).
@@ -59,4 +60,6 @@ Roadmap Addendum – Web Companion
 1. **Server-rendered shell (now)**: replace the pseudo-SPA router with classic Symfony routes + Twig views so every URL is first-class, SEO-friendly, and easier to test.
 2. **Tailwind adoption (shipped)**: the calm “card stack” aesthetic now lives in `assets/styles/app.css` (with `@import "tailwindcss"`). Keep `php bin/console tailwind:build --watch` running while touching CSS, then run `php bin/console asset-map:compile` so the hashed stylesheet in `public/assets/styles/` reflects the latest utilities. See `docs/style-guide.md` for the living component spec.
 3. **Progressive data hydration (next)**: expose JSON endpoints for dashboard stats/device approvals and attach lightweight vanilla controllers (no frameworks) that hydrate panels when visible.
-4. **Accessibility sweep (later)**: audit pages with Axe + keyboard-only passes, ensuring Tailwind component variants meet WCAG contrast + focus requirements.
+4. **Admin + LMS CRUD (shipped)**: EasyAdmin `/admin` dashboard lets operators seed Courses/Lessons/Assignments straight into Postgres. Next: wire those tables into `/courses`, `/docs`, and the CLI so learners see live content instead of Markdown stubs.
+5. **Learning data APIs (next)**: build read-only endpoints (`/api/courses`, `/api/lessons/{slug}`, `/api/assignments/{code}`) plus CLI download hooks that serialize the DB-backed specs. Once live, Module 01 tasks can ship via API instead of Markdown tables.
+6. **Accessibility sweep (later)**: audit pages with Axe + keyboard-only passes, ensuring Tailwind component variants meet WCAG contrast + focus requirements.

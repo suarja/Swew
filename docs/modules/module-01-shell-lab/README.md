@@ -1,6 +1,6 @@
 # Module 01 — Boot the Dojo (Shell & Environment Lab)
 
-This opening module sets the stage for the entire CLI-first mastery journey. Learners outfit their workstation, prove their environment can be coached, and internalize why the terminal is the primary interface for the program. It mirrors the “Act I – Boot the Dojo” beat from `docs/curriculum-manifest.md`.
+This opening module sets the stage for the entire CLI-first mastery journey. Learners outfit their workstation, prove their environment can be coached, and internalize why the terminal is the primary interface for the program. It mirrors the “Act I – Boot the Dojo” beat from `docs/curriculum-manifest.md`. Course/Lesson/Assignment records now live in Postgres via the EasyAdmin dashboard (`/admin`), so updates here must also be reflected through the admin UI before shipping.
 
 ## Narrative Snapshot
 - **Why now?** Before chasing deeper runtime or systems insight, the platform needs to trust the learner’s machine. The story is about earning that trust by demonstrating discipline with the shell.
