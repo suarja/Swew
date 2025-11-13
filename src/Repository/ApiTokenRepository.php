@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\ApiToken;
+use App\Entity\User;
 use DateTimeImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -33,6 +34,14 @@ class ApiTokenRepository extends ServiceEntityRepository
         $em = $this->getEntityManager();
         $em->persist($token);
         $em->flush();
+    }
+
+    public function create(User $user, string $label, string $rawToken): ApiToken
+    {
+        return (new ApiToken())
+            ->setUser($user)
+            ->setLabel($label)
+            ->setTokenHash(hash('sha256', $rawToken));
     }
 
     public function countActiveTokens(DateTimeImmutable $now): int

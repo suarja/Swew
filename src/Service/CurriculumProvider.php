@@ -22,7 +22,7 @@ final class CurriculumProvider
      *
      * @var string[]
      */
-    private const VISIBLE_STATUSES = ['live', 'preview'];
+    public const VISIBLE_STATUSES = ['live', 'preview'];
 
     public function __construct(
         private readonly CourseRepository $courses,
@@ -139,6 +139,7 @@ final class CurriculumProvider
             'title' => $lesson->getTitle(),
             'summary' => $lesson->getSummary(),
             'content' => $lesson->getContent(),
+            'videoUrl' => $lesson->getVideoUrl(),
             'sequence' => $lesson->getSequencePosition(),
             'course' => $this->courseSummary($lesson->getCourse()),
             'assignments' => $assignments,

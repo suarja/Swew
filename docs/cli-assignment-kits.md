@@ -12,6 +12,8 @@ This note captures the plan for bundling assignments directly inside the Ink CLI
 swew/
   source/
     assignments/
+      index.ts
+      types.ts
       BOOT-CLI-001/
         manifest.ts
         run.ts
@@ -66,7 +68,7 @@ export async function runDoctorChecks(): Promise<AssignmentRunResult> {
 }
 ```
 
-During the CLI build we autogenerate `assignments/index.ts` that imports every manifest and exposes a registry for the `swew submit` command.
+During the CLI build we autogenerate (or manually maintain) `assignments/index.ts` that imports every manifest and exposes a registry for the `swew submit` command. The repo currently ships a `BOOT-CLI-TEST` kit that mirrors the Symfony fixture course so backend tests and CLI dry runs share the same spec.
 
 ## CLI Flow
 1. Learner runs `swew submit` (or `swew submit <code>`).

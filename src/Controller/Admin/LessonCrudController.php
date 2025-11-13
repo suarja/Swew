@@ -29,6 +29,7 @@ class LessonCrudController extends AbstractCrudController
             IntegerField::new('sequencePosition')->setHelp('Ordering inside the course'),
             TextareaField::new('summary')->hideOnIndex(),
             TextareaField::new('content')->hideOnIndex(),
+            TextField::new('videoUrl')->hideOnIndex()->setHelp('Optional video embed URL (YouTube, Vimeo, etc.)'),
             AssociationField::new('assignments')->onlyOnDetail(),
             DateTimeField::new('updatedAt')->hideOnForm(),
         ];

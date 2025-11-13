@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Not Found · SWE Wannabe{% endblock %}
+
+{% block body %}
+    <div class="page-stack">
+        <section class="card hero-card">
+            <p class="card-eyebrow">shell · missing route</p>
+            <h1 class="card-title">We couldn't find that resource.</h1>
+            <p class="card-text" style="max-width:60ch;">
+                The path you requested doesn't map to a live lesson or assignment yet.
+                Re-check the code/slug, or jump back to the course catalog to keep working.
+            </p>
+            <div style="display:flex;flex-wrap:wrap;gap:0.75rem;margin-top:1.5rem;">
+                <a class="pill-link primary" href="{{ path('app_courses') }}">Browse courses</a>
+                <a class="pill-link" href="{{ path('app_shell') }}">Return to workbench</a>
+            </div>
+        </section>
+
+        <section class="card">
+            <p class="card-eyebrow">next steps</p>
+            <ul class="muted-list">
+                <li>Double-check the assignment code (e.g. <code>BOOT-CLI-001</code>).</li>
+                <li>Use <code>swew courses</code> or the catalog to copy the canonical slug.</li>
+                <li>If you expected a CLI-only smoke test (like <code>BOOT-CLI-TEST</code>), run it from the terminal—those kits aren't exposed on the web yet.</li>
+            </ul>
+        </section>
+    </div>
+{% endblock %}

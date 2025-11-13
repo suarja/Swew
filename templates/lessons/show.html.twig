@@ -8,7 +8,13 @@
             <p class="card-eyebrow">{{ lesson.course ? lesson.course.title : 'lesson' }}</p>
             <h1 class="card-title">{{ lesson.title }}</h1>
             <p class="card-text">Sequence {{ '%02d'|format(lesson.sequence) }} · slug <code>{{ lesson.slug }}</code></p>
-            <p class="card-text" style="margin-top:1rem;max-width:60ch;">{{ lesson.summary ?? 'Summary coming soon.' }}</p>
+            <div class="card-text lesson-summary" style="margin-top:1rem;max-width:60ch;">
+                {% if lesson.summary %}
+                    {{ lesson.summary|markdown_to_html|raw }}
+                {% else %}
+                    <p>Summary coming soon.</p>
+                {% endif %}
+            </div>
             <div style="display:flex;flex-wrap:wrap;gap:0.75rem;margin-top:1.5rem;">
                 <a class="pill-link primary" href="{{ path('app_courses') }}">Back to courses</a>
                 {% if lesson.course %}
@@ -17,28 +23,37 @@
             </div>
         </section>
 
+        {% if lesson.videoUrl %}
+            <section class="card">
+                <p class="card-eyebrow">lesson video</p>
+                <div class="responsive-video">
+                    <iframe src="{{ lesson.videoUrl }}" allowfullscreen title="Lesson video"></iframe>
+                </div>
+            </section>
+        {% endif %}
+
         <section class="card">
             <p class="card-eyebrow">lesson content</p>
-            <article style="display:flex;flex-direction:column;gap:1rem;color:#0f172a;">
-                {% if lesson.content %}
-                    {{ lesson.content|nl2br }}
-                {% else %}
-                    <p class="card-text">Content drafting in progress. Capture notes in <code>docs/modules/</code> until the copy lands here.</p>
-                {% endif %}
-            </article>
+            {% if lesson.content %}
+                <article class="lesson-markdown">
+                    {{ lesson.content|markdown_to_html|raw }}
+                </article>
+            {% else %}
+                <p class="card-text">Content drafting in progress. Capture notes in <code>docs/modules/</code> until the copy lands here.</p>
+            {% endif %}
         </section>
 
         <section class="card">
             <p class="card-eyebrow">assignments</p>
             <div class="flex flex-col gap-4">
                 {% for assignment in lesson.assignments %}
-                    <article class="rounded-2xl border border-slate-200/80 bg-white/90 p-5">
+                    <article class="rounded-2xl border border-slate-200/80 bg-white/90 p-5" data-assignment-code="{{ assignment.code }}">
                         <div class="flex flex-col gap-1">
                             <div class="flex items-baseline justify-between gap-3">
                                 <a class="font-semibold tracking-tight" href="{{ path('app_assignments_show', { code: assignment.code }) }}">
                                     {{ assignment.code }} · {{ assignment.title }}
                                 </a>
-                                <span class="text-xs font-mono uppercase tracking-[0.2em] text-slate-500">{{ assignment.displayOrder|default(0) }}</span>
+                                <span class="assignment-status-chip" data-assignment-status="pending">pending</span>
                             </div>
                             <p class="card-text" style="margin:0;">{{ assignment.description ?? 'Description coming soon.' }}</p>
                         </div>

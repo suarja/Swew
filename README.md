@@ -64,6 +64,7 @@ Set `SWEW_ACCEPT_SELF_SIGNED=1` if you want Node to ignore the local TLS certifi
 - The build step bundles every manifest into the CLI. The upcoming `swew submit` command will look up the next unlocked assignment (via `/api/progress`), run the manifest’s evaluator, prompt for any reflections, then POST a JSON payload to `/api/submissions`.
 - Because kits are part of the CLI artifact, we track both CLI version and kit version in submission payloads. When an assignment kit changes, we cut a new CLI release instead of pushing S3 downloads.
 - The web shell still pulls lesson/course copy from Postgres; assignments in the DB remain the public-facing spec. The CLI manifest is the source of truth for evaluator behavior.
+- A `BOOT-CLI-TEST` manifest already exists under `swew/source/assignments/` so the Symfony fixtures (`tests/Functional/*`) and future CLI submit flows can reference the same spec during end-to-end tests.
 
 ### Admin Panel
 - EasyAdmin lives at `/admin` and is available only to `ROLE_ADMIN` accounts via Symfony Security.
@@ -74,6 +75,8 @@ Set `SWEW_ACCEPT_SELF_SIGNED=1` if you want Node to ignore the local TLS certifi
 - `GET /api/courses` — list `live` + `preview` courses with ordered lessons.
 - `GET /api/lessons/{slug}` — lesson detail with full text and assignment specs.
 - `GET /api/assignments/{code}` — assignment detail plus lesson/course context.
+- `GET /api/progress` — learner-centric snapshot (current course/lesson, next assignment, assignment history).
+- `POST /api/submissions` — CLI uploads evaluator results (`assignment`, `cliVersion`, `kitVersion`, `status`, `checks`, `prompts`, `system`, `logs`); backend stores a `Submission` row, updates progress, and emits Mercure updates.
 - The Twig shell exposes the same data at `/courses`, `/lessons/{slug}`, and `/assignments/{code}` and the Ink CLI surfaces it via `swew courses`. Authenticate with the same bearer tokens used by `swew status`.
 
 ## Quality & Testing

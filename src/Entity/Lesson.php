@@ -34,6 +34,9 @@ class Lesson
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $content = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $videoUrl = null;
+
     #[ORM\Column]
     private int $sequencePosition = 1;
 
@@ -123,6 +126,18 @@ class Lesson
     public function setContent(?string $content): self
     {
         $this->content = $content;
+
+        return $this;
+    }
+
+    public function getVideoUrl(): ?string
+    {
+        return $this->videoUrl;
+    }
+
+    public function setVideoUrl(?string $videoUrl): self
+    {
+        $this->videoUrl = $videoUrl;
 
         return $this;
     }

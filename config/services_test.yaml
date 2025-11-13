@@ -1,0 +1,3 @@
+services:
+    Symfony\Component\Mercure\HubInterface:
+        class: App\Tests\Stub\NullHub
