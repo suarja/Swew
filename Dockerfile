@@ -100,4 +100,5 @@ RUN set -eux; \
 
 RUN set -eux; \
         php bin/console typescript:build; \
-        php bin/console tailwind:build;
+        php bin/console tailwind:build --minify \
+		php bin/console asset-map:compile
