@@ -92,10 +92,12 @@ RUN set -eux; \
 COPY --link --exclude=frankenphp/ . ./
 
 RUN set -eux; \
-	mkdir -p var/cache var/log; \
-	composer dump-autoload --classmap-authoritative --no-dev; \
-	composer dump-env prod; \
-	composer run-script --no-dev post-install-cmd; \
-	chmod +x bin/console; sync;
-    bin/console typescript:build; \
-    bin/console tailwind:build;
+        mkdir -p var/cache var/log; \
+        composer dump-autoload --classmap-authoritative --no-dev; \
+        composer dump-env prod; \
+        composer run-script --no-dev post-install-cmd; \
+        chmod +x bin/console; sync;
+
+RUN set -eux; \
+        php bin/console typescript:build; \
+        php bin/console tailwind:build;
