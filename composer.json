@@ -31,8 +31,9 @@
         "symfony/yaml": "7.3.*",
         "twig/extra-bundle": "^2.12|^3.22",
         "twig/markdown-extra": "^3.22",
-        "twig/twig": "^2.12|^3.22"
-    },
+        "twig/twig": "^2.12|^3.22",
+        "symfonycasts/tailwind-bundle": "^0.11.1"
+            },
     "config": {
         "allow-plugins": {
             "php-http/discovery": true,
@@ -91,7 +92,6 @@
         "symfony/css-selector": "7.3.*",
         "symfony/maker-bundle": "^1.64",
         "symfony/stopwatch": "7.3.*",
-        "symfony/web-profiler-bundle": "7.3.*",
-        "symfonycasts/tailwind-bundle": "^0.11.1"
+        "symfony/web-profiler-bundle": "7.3.*"
     }
 }
