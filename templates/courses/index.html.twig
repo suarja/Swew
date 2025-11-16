@@ -3,59 +3,80 @@
 {% block title %}Courses · SWE Wannabe{% endblock %}
 
 {% block body %}
-    <div class="page-stack">
-        <section class="card hero-card">
-            <p class="card-eyebrow">courses</p>
-            <h1 class="card-title">Pick the next lab from the live catalog.</h1>
-            <p class="card-text">
-                Lessons, assignments, and CLI rituals now pull straight from Postgres via the EasyAdmin forms.
-                Each course below links into the same specs your terminal will download, so the story never drifts from web to CLI.
-            </p>
-            <div style="display:flex;flex-wrap:wrap;gap:0.75rem;margin-top:1.5rem;">
-                <a class="pill-link primary" href="/docs">Open docs</a>
-                <a class="pill-link" href="/cli">Review CLI rituals</a>
+    {% set totalLessons = 0 %}
+    {% for course in courses %}
+        {% set totalLessons = totalLessons + course.lessonCount %}
+    {% endfor %}
+
+    <div class="courses-layout">
+        <section class="card hero-card courses-hero">
+            <div>
+                <p class="card-eyebrow">courses</p>
+                <h1 class="card-title">Build the next lab with calm focus.</h1>
+                <p class="card-text">
+                    Every lesson mirrors the CLI assignments. Read the brief, open the docs, then jump back
+                    to your terminal knowing the specs and grading flow are in sync.
+                </p>
+                <div class="hero-actions">
+                    <a class="pill-link primary" href="/docs">Open docs</a>
+                    <a class="pill-link" href="/cli">Review CLI rituals</a>
+                </div>
+            </div>
+            <div class="hero-meta">
+                <div>
+                    <p class="hero-meta__label">Live courses</p>
+                    <p class="hero-meta__value">{{ courses|length }}</p>
+                </div>
+                <div>
+                    <p class="hero-meta__label">Assignments shipped</p>
+                    <p class="hero-meta__value">{{ totalLessons }}</p>
+                </div>
             </div>
         </section>
 
-        <section class="card">
-            <p class="card-eyebrow">catalog</p>
+        <section class="courses-feed">
             {% if courses|length > 0 %}
-                <div class="catalog-stack">
-                    {% for course in courses %}
-                        <article id="{{ course.slug }}" class="catalog-card">
-                            <div class="catalog-card__header">
-                                <div class="catalog-card__intro">
-                                    <h2 class="catalog-card__title">{{ course.title }}</h2>
-                                    <p class="catalog-card__summary">{{ course.summary ?? 'Summary coming soon.' }}</p>
-                                </div>
-                                <div class="catalog-card__chips">
-                                    <span class="catalog-chip">{{ course.status|upper }}</span>
-                                    <span class="catalog-chip">{{ course.lessonCount }} lessons</span>
-                                </div>
+                {% for course in courses %}
+                    <article id="{{ course.slug }}" class="course-entry">
+                        <header class="course-entry__header">
+                            <div>
+                                <p class="course-entry__eyebrow">{{ course.status|upper }}</p>
+                                <h2 class="course-entry__title">{{ course.title }}</h2>
+                                <p class="course-entry__summary">{{ course.summary ?? 'Summary coming soon.' }}</p>
                             </div>
-                            <div class="catalog-card__lessons">
+                            <div class="course-entry__meta">
+                                <span>{{ course.lessonCount }} lessons</span>
+                                <span>slug · {{ course.slug }}</span>
+                            </div>
+                        </header>
+                        <div class="course-entry__body">
+                            <div class="course-entry__lessons">
                                 <p class="card-eyebrow">lessons</p>
-                                <ol class="lesson-list">
+                                <ol>
                                     {% for lesson in course.lessons %}
-                                        <li class="lesson-list__item">
-                                            <div class="lesson-list__meta">
-                                                <a class="lesson-list__link" href="{{ path('app_lessons_show', { slug: lesson.slug }) }}">
-                                                    {{ '%02d'|format(lesson.sequence) }} · {{ lesson.title }}
-                                                </a>
-                                                <span class="lesson-list__slug">{{ lesson.slug }}</span>
-                                            </div>
-                                            <p class="lesson-list__summary">{{ lesson.summary ?? 'Lesson content coming soon.' }}</p>
+                                        <li>
+                                            <a href="{{ path('app_lessons_show', { slug: lesson.slug }) }}">
+                                                <span class="lesson-seq">{{ '%02d'|format(lesson.sequence) }}</span>
+                                                <span>{{ lesson.title }}</span>
+                                            </a>
+                                            <p>{{ lesson.summary ?? 'Lesson content coming soon.' }}</p>
                                         </li>
                                     {% else %}
-                                        <li class="lesson-list__item lesson-list__item--empty">No lessons yet.</li>
+                                        <li class="empty">No lessons yet.</li>
                                     {% endfor %}
                                 </ol>
                             </div>
-                        </article>
-                    {% endfor %}
-                </div>
+                            <div class="course-entry__cta">
+                                <p>Assignments ship straight from this course. Keep your terminal paired and submit via <code>swew submit</code>.</p>
+                                <a class="pill-link primary" href="{{ path('app_lessons_show', { slug: course.lessons|first ? course.lessons|first.slug : course.slug }) }}">Open latest brief</a>
+                            </div>
+                        </div>
+                    </article>
+                {% endfor %}
             {% else %}
-                <p class="card-text">No live courses yet. Seed the catalog in <code>/admin</code> to surface content here.</p>
+                <div class="course-empty card">
+                    <p class="card-text">No live courses yet. Seed the catalog in <code>/admin</code> to surface content here.</p>
+                </div>
             {% endif %}
         </section>
     </div>
