@@ -14,6 +14,10 @@ default: dev-up
 # 🧑‍💻 Local dev (Dunglas stack)
 # ---------------------------
 
+# Builds the project
+dev-build:
+     docker compose build --pull --no-cache
+
 # Start dev stack (frankenphp_dev)
 dev-up:
     docker compose up --wait
@@ -58,11 +62,11 @@ tailwind-watch:
 ts-build:
     php bin/console typescript:build
 
-# Génère le CSS final à copier en prod si besoin
-# (ex: cp var/tailwind/app.built.css public/styles/app.css)
-build-css-prod:
+# Full asset rebuild (Tailwind + Asset Mapper)
+assets-build:
+    rm -rf public/assets
     php bin/console tailwind:build
-    cp var/tailwind/app.built.css public/styles/app.css
+    php bin/console asset-map:compile
 
 # ---------------------------
 # 🚀 Prod (build & deploy image sur la VM)
