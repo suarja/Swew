@@ -1,0 +1,22 @@
+{
+    "app": {
+        "path": "\/assets\/app-NBuzC0e.js",
+        "type": "js"
+    },
+    "\/assets\/src\/app.js": {
+        "path": "\/assets\/src\/app-jsg84HY.js",
+        "type": "js"
+    },
+    "\/assets\/src\/components.js": {
+        "path": "\/assets\/src\/components-3OvjMOo.js",
+        "type": "js"
+    },
+    "\/assets\/src\/statusPulse.component.js": {
+        "path": "\/assets\/src\/statusPulse.component-9QUOjMJ.js",
+        "type": "js"
+    },
+    "\/assets\/styles\/app.css": {
+        "path": "\/assets\/styles\/app-pAAXR5c.css",
+        "type": "css"
+    }
+}
